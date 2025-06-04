@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Commando Force League Predictions</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commando Force 2025/26 Predictions</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .team-prediction {
+      margin-bottom: 10px;
+    }
+    .team-prediction input {
+      padding: 5px;
+      border: 1px solid #ccc;
+      width: 60%;
+    }
+    .separator {
+      margin: 2rem 0;
+      border-top: 2px solid #ccc;
+    }
+    .additional-predictions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .additional-predictions input {
+      padding: 5px;
+      border: 1px solid #ccc;
+      width: 90%;
+    }
+    .additional-predictions h3 {
+      grid-column: span 2;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Commando Force 2025/26 League Predictions</h1>
+    <p>Fill in your full Premier League table prediction and export as PDF.</p>
+
+    <div class="name-input" style="margin-top: 1rem;">
+      <label for="userName">Name:</label>
+      <input type="text" id="userName" name="userName" placeholder="Enter your name" required />
+    </div>
+  </header>
+
+  <form id="predictionForm">
+    <div id="predictionsContainer"></div>
+
+    <div class="separator"></div>
+
+    <div class="additional-predictions">
+      <h3>Bonus Predictions</h3>
+      <input type="text" id="topScorer" placeholder="Top Scorer" />
+      <input type="text" id="mostAssists" placeholder="Most Assists" />
+      <input type="text" id="faCupWinner" placeholder="FA Cup Winner" />
+      <input type="text" id="surprisePackage" placeholder="Surprise Package" />
+      <input type="text" id="firstSack" placeholder="First Manager to be Sacked" />
+      <input type="text" id="goldenGlove" placeholder="Golden Glove" />
+      <input type="text" id="underperformingTeam" placeholder="Most Underperforming Team" />
+      <input type="text" id="mostRedCards" placeholder="Team with Most Red Cards" />
+    </div>
+
+    <button type="button" onclick="generatePDF()">Download as PDF</button>
+  </form>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    const teams = [
+      "Arsenal", "Aston Villa", "Bournemouth", "Brentford", "Brighton", "Burnley",
+      "Chelsea", "Crystal Palace", "Everton", "Fulham", "Leeds United", "Liverpool",
+      "Manchester City", "Manchester United", "Newcastle United", "Nottingham Forest",
+      "Sunderland", "Tottenham Hotspur", "West Ham United", "Wolverhampton"
+    ];
+
+    const predictionsContainer = document.getElementById('predictionsContainer');
+
+    teams.forEach((team, index) => {
+      const div = document.createElement('div');
+      div.classList.add('team-prediction');
+      const label = index === 0 ? 'C.' : `${index + 1}:`;
+      div.innerHTML = `
+        <label for="team-${index}">${label}</label>
+        <input type="text" id="team-${index}" name="team-${index}" placeholder="Enter team name" required />
+      `;
+      predictionsContainer.appendChild(div);
+    });
+
+    async function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const userName = document.getElementById("userName").value;
+      const today = new Date().toLocaleDateString();
+
+      doc.setFillColor(7, 42, 200);
+      doc.rect(0, 0, 210, 20, "F");
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(18);
+      doc.setFont("helvetica", "bold");
+      doc.text("Commando Force 2025/26 Predictions", 105, 13, { align: "center" });
+
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+      doc.text(`Name: ${userName}`, 20, 28);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Date: ${today}`, 150, 28);
+
+      const startX = 15;
+      const startY = 35;
+      const rowHeight = 8;
+
+      for (let i = 0; i < teams.length; i++) {
+        const teamName = document.getElementById(`team-${i}`).value;
+        const label = i === 0 ? 'C' : `${i + 1}`;
+        const yPos = startY + i * rowHeight;
+
+        if (i === 0) {
+          doc.setFillColor(233, 196, 106);
+        } else if (i < 4 || i === 4) {
+          doc.setFillColor(42, 157, 143);
+        } else if (i > 16) {
+          doc.setFillColor(255, 220, 220);
+        } else {
+          doc.setFillColor(245, 245, 245);
+        }
+        doc.rect(startX, yPos - 5.5, 90, rowHeight, 'F');
+        doc.setTextColor(0, 0, 0);
+        doc.text(`${label}. ${teamName}`, startX + 5, yPos);
+      }
+
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "bold");
+      doc.text("Leaderboard of 2023/24 Season", 115, 35);
+      doc.setFont("helvetica", "normal");
+      const leaderboard = [
+        "1st Shami - 48 points",
+        "2nd Waji - 50 points",
+        "3rd Minzzy - 54 points",
+        "4th Hussein - 58 points"
+      ];
+      leaderboard.forEach((entry, i) => {
+        doc.text(entry, 115, 45 + i * 8);
+      });
+
+      const bonusStartY = startY + teams.length * rowHeight + 10;
+      doc.setFont("helvetica", "bold");
+      doc.text("Bonus Predictions", startX, bonusStartY);
+      doc.setFont("helvetica", "normal");
+
+      const bonusFields = [
+        { id: 'topScorer', label: 'Top Scorer' },
+        { id: 'faCupWinner', label: 'FA Cup Winner' },
+        { id: 'underperformingTeam', label: 'Most Underperforming Team' },
+        { id: 'surprisePackage', label: 'Surprise Package' },
+        { id: 'mostAssists', label: 'Most Assists' },
+        { id: 'firstSack', label: 'First Manager to be Sacked' },
+        { id: 'goldenGlove', label: 'Golden Glove' },
+        { id: 'mostRedCards', label: 'Team with Most Red Cards' },
+      ];
+
+      bonusFields.forEach((field, i) => {
+        const value = document.getElementById(field.id).value;
+        doc.text(`${field.label}: ${value}`, startX, bonusStartY + 10 + i * 8);
+      });
+
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text("Predictions are final — No changes after submission!", 105, 280, { align: "center" });
+
+      doc.save(`CommandoForce2025-26_${userName || 'Prediction'}.pdf`);
+    }
+  </script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
