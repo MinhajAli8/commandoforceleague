@@ -3,23 +3,38 @@
 :root {
   --navy: #07173f;
   --navy-light: #10275e;
+
   --blue: #1748d1;
   --blue-light: #dce7ff;
+
   --gold: #f4c542;
   --gold-light: #fff3bf;
+
+  --orange: #f39a2f;
+  --orange-light: #ffe7c5;
+
+  --green: #16936f;
+  --green-light: #d9f5e7;
+
   --red: #d92738;
   --red-light: #ffe0e4;
-  --green: #16936f;
+
   --surface: #ffffff;
   --background: #f2f5fb;
   --text: #162039;
   --muted: #6c758b;
   --border: #dce2ed;
+
   --shadow: 0 18px 50px rgba(16, 33, 72, 0.1);
+
   --radius-large: 24px;
   --radius-medium: 16px;
   --radius-small: 10px;
 }
+
+/* ============================================================
+   GLOBAL
+============================================================ */
 
 * {
   box-sizing: border-box;
@@ -32,10 +47,17 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+
   background:
-    radial-gradient(circle at top left, rgba(23, 72, 209, 0.08), transparent 28rem),
+    radial-gradient(
+      circle at top left,
+      rgba(23, 72, 209, 0.08),
+      transparent 28rem
+    ),
     var(--background);
+
   color: var(--text);
+
   font-family: "Inter", sans-serif;
 }
 
@@ -44,33 +66,51 @@ input {
   font: inherit;
 }
 
+/* ============================================================
+   WEBSITE HERO
+============================================================ */
+
 .hero {
   position: relative;
   overflow: hidden;
+
   background:
-    linear-gradient(135deg, #061437 0%, #0d2868 55%, #194ec9 100%);
+    linear-gradient(
+      135deg,
+      #061437 0%,
+      #0d2868 55%,
+      #194ec9 100%
+    );
+
   color: white;
+
   padding: 72px 24px 120px;
 }
 
 .hero__inner {
   position: relative;
   z-index: 2;
+
   width: min(1180px, 100%);
   margin: 0 auto;
 }
 
 .hero__glow {
   position: absolute;
+
   border-radius: 50%;
+
   filter: blur(10px);
+
   opacity: 0.28;
 }
 
 .hero__glow--one {
   width: 340px;
   height: 340px;
+
   background: #52a8ff;
+
   right: -70px;
   top: -160px;
 }
@@ -78,7 +118,9 @@ input {
 .hero__glow--two {
   width: 260px;
   height: 260px;
+
   background: #f4c542;
+
   left: 8%;
   bottom: -180px;
 }
@@ -86,10 +128,14 @@ input {
 .eyebrow,
 .section-kicker {
   margin: 0 0 8px;
+
   color: #6c91ff;
+
   font-size: 0.76rem;
   font-weight: 800;
+
   letter-spacing: 0.16em;
+
   text-transform: uppercase;
 }
 
@@ -99,45 +145,70 @@ input {
 
 .hero h1 {
   max-width: 780px;
+
   margin: 0;
+
   font-family: "Manrope", sans-serif;
+
   font-size: clamp(2.4rem, 6vw, 4.8rem);
+
   line-height: 1.03;
+
   letter-spacing: -0.05em;
 }
 
 .hero__copy {
   max-width: 680px;
+
   margin: 24px 0 0;
+
   color: rgba(255, 255, 255, 0.78);
+
   font-size: 1.05rem;
+
   line-height: 1.75;
 }
+
+/* ============================================================
+   WEBSITE LEGEND
+============================================================ */
 
 .hero__badges {
   display: flex;
   flex-wrap: wrap;
+
   gap: 10px;
+
   margin-top: 30px;
 }
 
 .hero__badges span {
   display: inline-flex;
   align-items: center;
+
   gap: 8px;
+
   padding: 9px 13px;
+
   border: 1px solid rgba(255, 255, 255, 0.16);
+
   border-radius: 999px;
+
   background: rgba(255, 255, 255, 0.08);
+
   backdrop-filter: blur(10px);
+
   color: rgba(255, 255, 255, 0.9);
+
   font-size: 0.82rem;
+
   font-weight: 600;
 }
 
 .key {
   width: 10px;
   height: 10px;
+
   border-radius: 3px;
 }
 
@@ -149,53 +220,91 @@ input {
   background: #6191ff;
 }
 
+.key--europa {
+  background: var(--orange);
+}
+
+.key--conference {
+  background: #39b774;
+}
+
 .key--relegation {
   background: #ff6675;
 }
 
+/* ============================================================
+   WEBSITE SHELL
+============================================================ */
+
 .shell {
-  width: min(1180px, calc(100% - 32px));
-  margin: -68px auto 0;
   position: relative;
   z-index: 4;
+
+  width: min(1180px, calc(100% - 32px));
+
+  margin: -68px auto 0;
 }
 
 .card {
   border: 1px solid rgba(220, 226, 237, 0.9);
+
   border-radius: var(--radius-large);
+
   background: rgba(255, 255, 255, 0.97);
+
   box-shadow: var(--shadow);
 }
 
+/* ============================================================
+   NAME + DATE
+============================================================ */
+
 .identity-card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 260px;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    260px;
+
   gap: 22px;
+
   padding: 24px;
+
   margin-bottom: 24px;
 }
 
 .field {
   display: flex;
   flex-direction: column;
+
   gap: 8px;
 }
 
 .field label {
   color: #27324d;
+
   font-size: 0.82rem;
+
   font-weight: 700;
 }
 
 .field input {
   width: 100%;
+
   min-height: 48px;
+
   border: 1px solid var(--border);
+
   border-radius: 12px;
+
   background: #fbfcff;
+
   color: var(--text);
+
   padding: 0 14px;
+
   outline: none;
+
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
@@ -208,18 +317,30 @@ input {
 
 .field input:focus {
   border-color: var(--blue);
-  box-shadow: 0 0 0 4px rgba(23, 72, 209, 0.11);
+
+  box-shadow:
+    0 0 0 4px rgba(23, 72, 209, 0.11);
 }
 
 .field input.input-error {
   border-color: var(--red);
+
   background: #fffafa;
 }
 
+/* ============================================================
+   WEBSITE MAIN GRID
+============================================================ */
+
 .page-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.65fr) minmax(290px, 0.75fr);
+
+  grid-template-columns:
+    minmax(0, 1.65fr)
+    minmax(290px, 0.75fr);
+
   align-items: start;
+
   gap: 24px;
 }
 
@@ -229,11 +350,19 @@ input {
   padding: 26px;
 }
 
+/* ============================================================
+   WEBSITE SECTION HEADINGS
+============================================================ */
+
 .section-heading {
   display: flex;
+
   justify-content: space-between;
+
   align-items: flex-start;
+
   gap: 18px;
+
   margin-bottom: 18px;
 }
 
@@ -244,43 +373,61 @@ input {
 .section-heading h2,
 .fpl-card h2 {
   margin: 0;
+
   font-family: "Manrope", sans-serif;
+
   font-size: 1.45rem;
+
   letter-spacing: -0.035em;
 }
 
 .progress-pill {
   flex-shrink: 0;
+
   padding: 8px 11px;
+
   border-radius: 999px;
+
   background: #edf2ff;
+
   color: #3656a3;
+
   font-size: 0.76rem;
+
   font-weight: 700;
 }
 
-.section-note {
-  margin: -6px 0 20px;
-  color: var(--muted);
-  font-size: 0.85rem;
-  line-height: 1.6;
-}
+/* ============================================================
+   WEBSITE LEAGUE TABLE
+============================================================ */
 
 .league-table {
   display: flex;
+
   flex-direction: column;
+
   gap: 7px;
 }
 
 .prediction-row {
   display: grid;
-  grid-template-columns: 48px minmax(0, 1fr);
+
+  grid-template-columns:
+    48px
+    minmax(0, 1fr);
+
   align-items: center;
+
   min-height: 52px;
+
   border: 1px solid var(--border);
+
   border-radius: 13px;
+
   overflow: hidden;
+
   background: #fff;
+
   transition:
     transform 0.18s ease,
     border-color 0.18s ease,
@@ -289,103 +436,179 @@ input {
 
 .prediction-row:focus-within {
   transform: translateY(-1px);
+
   border-color: #9bb5f7;
-  box-shadow: 0 8px 20px rgba(21, 55, 131, 0.08);
+
+  box-shadow:
+    0 8px 20px rgba(21, 55, 131, 0.08);
 }
 
 .position-number {
   height: 100%;
+
   display: grid;
+
   place-items: center;
+
   background: #edf1f8;
+
   color: #33405d;
+
   font-size: 0.87rem;
+
   font-weight: 800;
 }
 
+/* Champion */
 .prediction-row:nth-child(1) .position-number {
   background: var(--gold-light);
+
   color: #7b5800;
 }
 
-.prediction-row:nth-child(n + 2):nth-child(-n + 5) .position-number {
+/* Champions League */
+.prediction-row:nth-child(n + 2):nth-child(-n + 5)
+  .position-number {
   background: var(--blue-light);
+
   color: #1748a8;
 }
 
-.prediction-row:nth-child(n + 18) .position-number {
+/* Europa League */
+.prediction-row:nth-child(6)
+  .position-number {
+  background: var(--orange-light);
+
+  color: #a85e00;
+}
+
+/* Conference League */
+.prediction-row:nth-child(7)
+  .position-number {
+  background: var(--green-light);
+
+  color: #147144;
+}
+
+/* Relegation */
+.prediction-row:nth-child(n + 18)
+  .position-number {
   background: var(--red-light);
+
   color: #ad1c2b;
 }
 
 .team-input {
   width: 100%;
+
   min-height: 50px;
+
   border: 0;
+
   background: transparent;
-  padding: 0 15px;
+
   color: var(--text);
+
+  padding: 0 15px;
+
   outline: none;
+
   font-weight: 600;
 }
 
 .team-input::placeholder {
   color: #adb4c1;
+
   font-weight: 400;
 }
 
+/* ============================================================
+   WEBSITE SIDEBAR
+============================================================ */
+
 .sidebar {
   display: flex;
+
   flex-direction: column;
+
   gap: 24px;
+
   position: sticky;
+
   top: 20px;
 }
 
+/* ============================================================
+   WEBSITE LEADERBOARD
+============================================================ */
+
 .leaderboard-list {
   display: flex;
+
   flex-direction: column;
+
   gap: 10px;
+
   margin: 0;
+
   padding: 0;
+
   list-style: none;
 }
 
 .leaderboard-list li {
   display: flex;
+
   align-items: center;
+
   gap: 13px;
+
   padding: 12px;
+
   border: 1px solid #e7ebf2;
+
   border-radius: 14px;
+
   background: #fafbfe;
 }
 
 .medal {
   display: grid;
+
   place-items: center;
+
   flex: 0 0 34px;
+
   width: 34px;
+
   height: 34px;
+
   border-radius: 50%;
+
   background: #e9edf4;
+
   color: #59647a;
+
   font-weight: 800;
+
   font-size: 0.82rem;
 }
 
 .medal--gold {
   background: #ffe59a;
+
   color: #765300;
 }
 
 .medal--silver {
   background: #e0e5ee;
+
   color: #536074;
 }
 
 .medal--bronze {
   background: #efd0b3;
+
   color: #855128;
 }
 
@@ -400,39 +623,74 @@ input {
 
 .leaderboard-list small {
   margin-top: 2px;
+
   color: var(--muted);
+
   font-size: 0.74rem;
 }
 
+/* ============================================================
+   WEBSITE FPL CARD
+============================================================ */
+
 .fpl-card {
   display: flex;
+
   align-items: center;
+
   gap: 18px;
+
   padding: 22px;
+
   background:
-    linear-gradient(135deg, rgba(255, 248, 211, 0.98), rgba(255, 255, 255, 0.98));
+    linear-gradient(
+      135deg,
+      rgba(255, 248, 211, 0.98),
+      rgba(255, 255, 255, 0.98)
+    );
+
   border-color: #eedb94;
 }
 
 .trophy {
   display: grid;
+
   place-items: center;
+
   flex: 0 0 54px;
+
   width: 54px;
+
   height: 54px;
+
   border-radius: 17px;
-  background: linear-gradient(145deg, #f3c93d, #dca614);
+
+  background:
+    linear-gradient(
+      145deg,
+      #f3c93d,
+      #dca614
+    );
+
   color: white;
-  box-shadow: 0 9px 20px rgba(207, 158, 18, 0.25);
+
+  box-shadow:
+    0 9px 20px rgba(207, 158, 18, 0.25);
+
   font-size: 1.4rem;
 }
 
 .fpl-card p {
   margin: 0 0 4px;
+
   color: #8a6813;
+
   font-size: 0.7rem;
+
   font-weight: 800;
+
   letter-spacing: 0.09em;
+
   text-transform: uppercase;
 }
 
@@ -442,84 +700,156 @@ input {
 
 .fpl-card span {
   display: block;
+
   margin-top: 5px;
+
   color: #8e7a44;
+
   font-size: 0.75rem;
 }
+
+/* ============================================================
+   WEBSITE BONUS PREDICTIONS
+============================================================ */
 
 .bonus-panel {
   margin-top: 24px;
 }
 
+.bonus-title {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: baseline;
+
+  gap: 8px;
+}
+
+.bonus-title span {
+  color: var(--muted);
+
+  font-size: 0.76rem;
+
+  font-weight: 600;
+}
+
 .bonus-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
   gap: 18px;
 }
 
-.field--wide {
-  grid-column: 1 / -1;
-}
+/* ============================================================
+   WEBSITE MESSAGES
+============================================================ */
 
 .message {
   display: none;
+
   margin: 20px 0 0;
+
   padding: 14px 16px;
+
   border-radius: 13px;
+
   font-size: 0.86rem;
+
   font-weight: 600;
+
   line-height: 1.5;
 }
 
 .message--error {
   display: block;
+
   border: 1px solid #efb5bc;
+
   background: #fff0f2;
+
   color: #a71d2c;
 }
 
 .message--success {
   display: block;
+
   border: 1px solid #b4e0d2;
+
   background: #ebfbf6;
+
   color: #0e7355;
 }
 
+/* ============================================================
+   WEBSITE SUBMIT
+============================================================ */
+
 .submit-card {
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
+
   gap: 24px;
+
   margin-top: 24px;
+
   padding: 24px 26px;
 }
 
 .submit-card p {
   margin: 4px 0 0;
+
   color: var(--muted);
+
   font-size: 0.84rem;
 }
 
 .submit-card__title {
   color: var(--text) !important;
+
   font-size: 1rem !important;
+
   font-weight: 800;
 }
 
 .download-btn {
   display: inline-flex;
+
   align-items: center;
+
   justify-content: center;
+
   gap: 10px;
+
   min-height: 50px;
+
   border: 0;
+
   border-radius: 14px;
+
   padding: 0 20px;
-  background: linear-gradient(135deg, #194ed0, #0a2d85);
+
+  background:
+    linear-gradient(
+      135deg,
+      #194ed0,
+      #0a2d85
+    );
+
   color: white;
-  box-shadow: 0 10px 25px rgba(22, 64, 167, 0.24);
+
+  box-shadow:
+    0 10px 25px rgba(22, 64, 167, 0.24);
+
   cursor: pointer;
+
   font-weight: 800;
+
   transition:
     transform 0.18s ease,
     box-shadow 0.18s ease,
@@ -528,7 +858,9 @@ input {
 
 .download-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 14px 30px rgba(22, 64, 167, 0.3);
+
+  box-shadow:
+    0 14px 30px rgba(22, 64, 167, 0.3);
 }
 
 .download-btn:active {
@@ -537,24 +869,1059 @@ input {
 
 .download-btn:disabled {
   cursor: wait;
+
   opacity: 0.7;
 }
 
 .download-btn svg {
   width: 19px;
+
   fill: none;
+
   stroke: currentColor;
+
   stroke-width: 2;
+
   stroke-linecap: round;
+
   stroke-linejoin: round;
 }
 
-footer {
+/* ============================================================
+   WEBSITE FOOTER
+============================================================ */
+
+body > footer {
   padding: 34px 20px 44px;
+
   color: #8a92a4;
+
   text-align: center;
+
   font-size: 0.8rem;
 }
+
+/* ============================================================
+   PREMIUM PDF RENDER AREA
+
+   IMPORTANT:
+   It stays off-screen, not display:none.
+   html2canvas needs it to actually exist/render.
+============================================================ */
+
+.pdf-render-area {
+  position: fixed;
+
+  top: 0;
+
+  left: -10000px;
+
+  width: 794px;
+
+  height: 1123px;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  z-index: -9999;
+
+  background: #eef2f8;
+}
+
+/* ============================================================
+   PREMIUM PDF DOCUMENT
+============================================================ */
+
+.pdf-document {
+  position: relative;
+
+  width: 794px;
+
+  height: 1123px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #fbfcff 100%
+    );
+
+  color: #17213a;
+
+  font-family: "Inter", sans-serif;
+}
+
+/* ============================================================
+   PDF HEADER
+============================================================ */
+
+.pdf-header {
+  position: relative;
+
+  height: 154px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      #061437 0%,
+      #0b245f 54%,
+      #174bd0 100%
+    );
+
+  color: #ffffff;
+}
+
+.pdf-header__glow {
+  position: absolute;
+
+  border-radius: 50%;
+
+  opacity: 0.28;
+}
+
+.pdf-header__glow--one {
+  width: 290px;
+
+  height: 290px;
+
+  right: -90px;
+
+  top: -150px;
+
+  background: #6fa6ff;
+
+  filter: blur(8px);
+}
+
+.pdf-header__glow--two {
+  width: 190px;
+
+  height: 190px;
+
+  left: 60px;
+
+  bottom: -135px;
+
+  background: #f4c542;
+
+  opacity: 0.14;
+
+  filter: blur(12px);
+}
+
+.pdf-header__content {
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  height: 100%;
+
+  padding: 30px 42px;
+}
+
+.pdf-brand {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+}
+
+.pdf-brand__mark {
+  display: grid;
+
+  place-items: center;
+
+  width: 58px;
+
+  height: 58px;
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.17),
+      rgba(255, 255, 255, 0.07)
+    );
+
+  color: #ffffff;
+
+  font-family: "Manrope", sans-serif;
+
+  font-size: 20px;
+
+  font-weight: 800;
+
+  letter-spacing: -0.04em;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.pdf-brand__eyebrow {
+  margin: 0 0 4px;
+
+  color: #a9c6ff;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.16em;
+
+  text-transform: uppercase;
+}
+
+.pdf-brand h1 {
+  margin: 0;
+
+  max-width: 360px;
+
+  font-family: "Manrope", sans-serif;
+
+  font-size: 25px;
+
+  line-height: 1.08;
+
+  letter-spacing: -0.04em;
+}
+
+.pdf-meta {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+  padding: 13px 16px;
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  border-radius: 15px;
+
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.pdf-meta__item {
+  min-width: 85px;
+}
+
+.pdf-meta__label {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: rgba(255, 255, 255, 0.58);
+
+  font-size: 7px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.1em;
+
+  text-transform: uppercase;
+}
+
+.pdf-meta__item strong {
+  display: block;
+
+  max-width: 115px;
+
+  overflow: hidden;
+
+  color: #ffffff;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.pdf-meta__divider {
+  width: 1px;
+
+  height: 30px;
+
+  background: rgba(255, 255, 255, 0.17);
+}
+
+/* ============================================================
+   PDF BODY
+============================================================ */
+
+.pdf-body {
+  padding: 22px 34px 18px;
+}
+
+/* ============================================================
+   PDF LEGEND
+============================================================ */
+
+.pdf-legend {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 20px;
+
+  height: 34px;
+
+  margin-bottom: 15px;
+
+  border: 1px solid #e5eaf2;
+
+  border-radius: 12px;
+
+  background: #f8faff;
+}
+
+.pdf-legend__item {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  color: #69748a;
+
+  font-size: 7px;
+
+  font-weight: 700;
+}
+
+.pdf-legend__dot {
+  width: 8px;
+
+  height: 8px;
+
+  border-radius: 3px;
+}
+
+.pdf-legend__dot--champion {
+  background: #f4c542;
+}
+
+.pdf-legend__dot--ucl {
+  background: #4770e0;
+}
+
+.pdf-legend__dot--europa {
+  background: #f39a2f;
+}
+
+.pdf-legend__dot--conference {
+  background: #16936f;
+}
+
+.pdf-legend__dot--relegation {
+  background: #d92738;
+}
+
+/* ============================================================
+   PDF MAIN GRID
+============================================================ */
+
+.pdf-main-grid {
+  display: grid;
+
+  grid-template-columns:
+    1.62fr
+    1fr;
+
+  gap: 16px;
+}
+
+.pdf-panel {
+  border: 1px solid #dfe5ee;
+
+  border-radius: 16px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 8px 22px rgba(21, 41, 84, 0.06);
+}
+
+/* ============================================================
+   PDF SECTION HEADINGS
+============================================================ */
+
+.pdf-section-heading {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 16px 17px 13px;
+}
+
+.pdf-section-heading--small {
+  padding-bottom: 10px;
+}
+
+.pdf-section-heading__eyebrow {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #5c7edf;
+
+  font-size: 7px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.14em;
+
+  text-transform: uppercase;
+}
+
+.pdf-section-heading h2 {
+  margin: 0;
+
+  color: #14203a;
+
+  font-family: "Manrope", sans-serif;
+
+  font-size: 15px;
+
+  letter-spacing: -0.035em;
+}
+
+.pdf-section-heading--small h2 {
+  font-size: 13px;
+}
+
+.pdf-season-pill {
+  padding: 6px 9px;
+
+  border-radius: 999px;
+
+  background: #edf2ff;
+
+  color: #3656a3;
+
+  font-size: 7px;
+
+  font-weight: 800;
+}
+
+/* ============================================================
+   PDF LEAGUE TABLE
+============================================================ */
+
+.pdf-table-panel {
+  padding-bottom: 13px;
+}
+
+.pdf-league-table {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+
+  padding: 0 13px 13px;
+}
+
+.pdf-league-row {
+  display: grid;
+
+  grid-template-columns:
+    38px
+    minmax(0, 1fr);
+
+  align-items: center;
+
+  height: 32px;
+
+  overflow: hidden;
+
+  border: 1px solid #e1e6ef;
+
+  border-radius: 9px;
+
+  background: #ffffff;
+}
+
+.pdf-league-row__position {
+  display: grid;
+
+  place-items: center;
+
+  height: 100%;
+
+  background: #edf1f7;
+
+  color: #45526b;
+
+  font-size: 9px;
+
+  font-weight: 800;
+}
+
+.pdf-league-row__team {
+  display: flex;
+
+  align-items: center;
+
+  height: 100%;
+
+  padding: 0 11px;
+
+  color: #17213a;
+
+  font-size: 9px;
+
+  font-weight: 700;
+}
+
+/* PDF Champion */
+.pdf-league-row--champion {
+  border-color: #ead179;
+
+  background:
+    linear-gradient(
+      90deg,
+      #fff8d8,
+      #fffdf5
+    );
+}
+
+.pdf-league-row--champion
+  .pdf-league-row__position {
+  background: #f4c542;
+
+  color: #6e5000;
+}
+
+/* PDF Champions League */
+.pdf-league-row--ucl {
+  border-color: #b8c8f3;
+
+  background:
+    linear-gradient(
+      90deg,
+      #edf3ff,
+      #fafcff
+    );
+}
+
+.pdf-league-row--ucl
+  .pdf-league-row__position {
+  background: #4770e0;
+
+  color: #ffffff;
+}
+
+/* PDF Europa League */
+.pdf-league-row--europa {
+  border-color: #edc18e;
+
+  background:
+    linear-gradient(
+      90deg,
+      #fff1df,
+      #fffaf4
+    );
+}
+
+.pdf-league-row--europa
+  .pdf-league-row__position {
+  background: #f39a2f;
+
+  color: #ffffff;
+}
+
+/* PDF Conference League */
+.pdf-league-row--conference {
+  border-color: #a7dcc5;
+
+  background:
+    linear-gradient(
+      90deg,
+      #e9f8f1,
+      #f8fdfb
+    );
+}
+
+.pdf-league-row--conference
+  .pdf-league-row__position {
+  background: #16936f;
+
+  color: #ffffff;
+}
+
+/* PDF Relegation */
+.pdf-league-row--relegation {
+  border-color: #efb4bc;
+
+  background:
+    linear-gradient(
+      90deg,
+      #ffe7ea,
+      #fff8f9
+    );
+}
+
+.pdf-league-row--relegation
+  .pdf-league-row__position {
+  background: #d92738;
+
+  color: #ffffff;
+}
+
+/* ============================================================
+   PDF SIDEBAR
+============================================================ */
+
+.pdf-sidebar {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+/* ============================================================
+   PDF LEADERBOARD
+============================================================ */
+
+.pdf-leaderboard-card {
+  padding-bottom: 11px;
+}
+
+.pdf-leaderboard {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+
+  padding: 0 12px;
+}
+
+.pdf-leaderboard__row {
+  display: grid;
+
+  grid-template-columns:
+    29px
+    minmax(0, 1fr)
+    auto;
+
+  align-items: center;
+
+  gap: 8px;
+
+  min-height: 39px;
+
+  padding: 6px 8px;
+
+  border: 1px solid #e7ebf2;
+
+  border-radius: 10px;
+
+  background: #fafbfe;
+}
+
+.pdf-leaderboard__row--winner {
+  border-color: #ead68d;
+
+  background:
+    linear-gradient(
+      90deg,
+      #fff9df,
+      #fffef9
+    );
+}
+
+.pdf-leaderboard__position {
+  display: grid;
+
+  place-items: center;
+
+  width: 27px;
+
+  height: 27px;
+
+  border-radius: 50%;
+
+  background: #e9edf4;
+
+  color: #59647a;
+
+  font-size: 8px;
+
+  font-weight: 800;
+}
+
+.pdf-leaderboard__position--gold {
+  background: #f6da78;
+
+  color: #725200;
+}
+
+.pdf-leaderboard__position--silver {
+  background: #dfe5ef;
+
+  color: #536074;
+}
+
+.pdf-leaderboard__position--bronze {
+  background: #e7c4a6;
+
+  color: #80502e;
+}
+
+.pdf-leaderboard__person strong {
+  display: block;
+
+  color: #18233c;
+
+  font-size: 8.5px;
+}
+
+.pdf-leaderboard__person span {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #929aab;
+
+  font-size: 6px;
+}
+
+.pdf-leaderboard__points {
+  color: #27324b;
+
+  font-size: 9px;
+}
+
+.pdf-leaderboard__points::after {
+  content: " pts";
+
+  color: #8d95a6;
+
+  font-size: 6px;
+
+  font-weight: 600;
+}
+
+.pdf-points-key {
+  margin: 9px 12px 0;
+
+  padding-top: 8px;
+
+  border-top: 1px solid #edf0f5;
+
+  color: #969eae;
+
+  font-size: 6.5px;
+
+  font-weight: 600;
+
+  text-align: center;
+}
+
+/* ============================================================
+   PDF FPL CHAMPION
+============================================================ */
+
+.pdf-fpl-card {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  min-height: 78px;
+
+  padding: 13px;
+
+  border: 1px solid #ead17d;
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff6cc,
+      #fffdf5
+    );
+
+  box-shadow:
+    0 8px 22px rgba(153, 113, 17, 0.08);
+}
+
+.pdf-fpl-card__icon {
+  display: grid;
+
+  place-items: center;
+
+  flex: 0 0 43px;
+
+  width: 43px;
+
+  height: 43px;
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f3c93d,
+      #dca614
+    );
+
+  color: white;
+
+  font-size: 17px;
+
+  box-shadow:
+    0 7px 16px rgba(207, 158, 18, 0.22);
+}
+
+.pdf-fpl-card__eyebrow {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #9b7516;
+
+  font-size: 6px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+}
+
+.pdf-fpl-card h3 {
+  margin: 0;
+
+  color: #40300c;
+
+  font-family: "Manrope", sans-serif;
+
+  font-size: 11px;
+
+  letter-spacing: -0.025em;
+}
+
+.pdf-fpl-card p {
+  margin: 3px 0 0;
+
+  color: #927d45;
+
+  font-size: 6.5px;
+}
+
+/* ============================================================
+   PDF BONUS PREDICTIONS
+============================================================ */
+
+.pdf-bonus-card {
+  padding-bottom: 12px;
+}
+
+.pdf-bonus-rule {
+  margin: -2px 13px 10px;
+
+  padding: 7px 9px;
+
+  border-radius: 8px;
+
+  background: #f3f6fd;
+
+  color: #63718f;
+
+  font-size: 6.5px;
+
+  font-weight: 700;
+
+  text-align: center;
+}
+
+.pdf-bonus-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+
+  padding: 0 12px;
+}
+
+.pdf-bonus-item {
+  padding: 7px 9px;
+
+  border: 1px solid #e7ebf2;
+
+  border-radius: 9px;
+
+  background: #fbfcfe;
+}
+
+.pdf-bonus-item__label {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #7d879a;
+
+  font-size: 5.8px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.07em;
+
+  text-transform: uppercase;
+}
+
+.pdf-bonus-item__value {
+  display: block;
+
+  overflow: hidden;
+
+  color: #1d2942;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+/* ============================================================
+   PDF FINAL NOTICE
+============================================================ */
+
+.pdf-final-notice {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  min-height: 53px;
+
+  margin-top: 15px;
+
+  padding: 10px 15px;
+
+  border: 1px solid #dce4f0;
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #f7f9fd,
+      #fbfcff
+    );
+}
+
+.pdf-final-notice__icon {
+  display: grid;
+
+  place-items: center;
+
+  flex: 0 0 27px;
+
+  width: 27px;
+
+  height: 27px;
+
+  border-radius: 50%;
+
+  background: #e4ebfc;
+
+  color: #315cc0;
+
+  font-size: 11px;
+
+  font-weight: 800;
+}
+
+.pdf-final-notice strong {
+  display: block;
+
+  margin-bottom: 2px;
+
+  color: #23304a;
+
+  font-size: 8px;
+}
+
+.pdf-final-notice span {
+  display: block;
+
+  color: #7b8496;
+
+  font-size: 6.5px;
+}
+
+/* ============================================================
+   PDF FOOTER
+============================================================ */
+
+.pdf-footer {
+  position: absolute;
+
+  left: 34px;
+
+  right: 34px;
+
+  bottom: 17px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding-top: 10px;
+
+  border-top: 1px solid #e5e9f0;
+
+  color: #8f98aa;
+
+  font-size: 6px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.1em;
+}
+
+/* ============================================================
+   TABLET
+============================================================ */
 
 @media (max-width: 900px) {
   .page-grid {
@@ -563,10 +1930,18 @@ footer {
 
   .sidebar {
     position: static;
+
     display: grid;
-    grid-template-columns: 1fr 1fr;
+
+    grid-template-columns:
+      1fr
+      1fr;
   }
 }
+
+/* ============================================================
+   MOBILE
+============================================================ */
 
 @media (max-width: 650px) {
   .hero {
@@ -589,17 +1964,27 @@ footer {
     grid-template-columns: 1fr;
   }
 
-  .field--wide {
-    grid-column: auto;
+  .bonus-title {
+    display: block;
+  }
+
+  .bonus-title span {
+    display: block;
+
+    margin-top: 5px;
+
+    line-height: 1.4;
   }
 
   .section-heading {
     flex-direction: column;
+
     gap: 10px;
   }
 
   .submit-card {
     align-items: stretch;
+
     flex-direction: column;
   }
 
