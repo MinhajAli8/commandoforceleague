@@ -1,3 +1,13 @@
+/* ============================================================
+   COMMANDO FORCE 2026/27
+   MAIN WEBSITE + PREMIUM PDF
+============================================================ */
+
+
+/* ============================================================
+   CLUBS
+============================================================ */
+
 const clubs = [
   "Arsenal",
   "Aston Villa",
@@ -21,1082 +31,1192 @@ const clubs = [
   "Tottenham Hotspur"
 ];
 
-const leaderboard = [
-  {
-    position: "1st",
-    name: "Minzzy",
-    points: 76
-  },
-  {
-    position: "2nd",
-    name: "Hussein",
-    points: 80
-  },
-  {
-    position: "3rd",
-    name: "Waji",
-    points: 84
-  },
-  {
-    position: "4th",
-    name: "Shami",
-    points: 92
-  },
-  {
-    position: "5th",
-    name: "Shabal",
-    points: 96
-  }
-];
+
+/* ============================================================
+   BONUS PREDICTIONS
+============================================================ */
 
 const bonusFields = [
   {
     id: "topScorer",
-    label: "Top Scorer"
-  },
-  {
-    id: "faCupWinner",
-    label: "FA Cup Winner"
-  },
-  {
-    id: "carabaoCupWinner",
-    label: "Carabao Cup Winner"
+    pdfId: "pdfTopScorer"
   },
   {
     id: "mostAssists",
-    label: "Most Assists"
+    pdfId: "pdfMostAssists"
+  },
+  {
+    id: "faCupWinner",
+    pdfId: "pdfFaCupWinner"
+  },
+  {
+    id: "carabaoCupWinner",
+    pdfId: "pdfCarabaoCupWinner"
   },
   {
     id: "firstSacked",
-    label: "First Manager to be Sacked"
+    pdfId: "pdfFirstSacked"
   },
   {
     id: "goldenGlove",
-    label: "Golden Glove"
+    pdfId: "pdfGoldenGlove"
   }
 ];
 
-const form = document.getElementById("predictionForm");
-const leagueTable = document.getElementById("leagueTable");
-const clubOptions = document.getElementById("clubOptions");
-const tableCount = document.getElementById("tableCount");
-const bonusCount = document.getElementById("bonusCount");
-const dateInput = document.getElementById("predictionDate");
-const messageBox = document.getElementById("message");
-const downloadButton = document.getElementById("downloadBtn");
+
+/* ============================================================
+   GENERAL HELPERS
+============================================================ */
 
 function normaliseText(value) {
-  return value.trim().toLowerCase();
+  return String(value || "")
+    .trim()
+    .toLowerCase();
 }
 
-function getTeamInputs() {
-  return Array.from(
-    document.querySelectorAll(".team-input")
-  );
-}
-
-function getBonusInputs() {
-  return bonusFields.map((field) => {
-    return document.getElementById(field.id);
-  });
-}
-
-function createClubOptions() {
-  const selectedTeams = getTeamInputs()
-    .map((input) => normaliseText(input.value))
-    .filter(Boolean);
-
-  clubOptions.innerHTML = "";
-
-  clubs.forEach((club) => {
-    const normalisedClub = normaliseText(club);
-
-    if (!selectedTeams.includes(normalisedClub)) {
-      const option = document.createElement("option");
-      option.value = club;
-      clubOptions.appendChild(option);
-    }
-  });
-}
-
-function createLeagueTable() {
-  leagueTable.innerHTML = "";
-
-  for (let position = 1; position <= 20; position += 1) {
-    const row = document.createElement("div");
-    row.className = "prediction-row";
-
-    const positionNumber = document.createElement("div");
-    positionNumber.className = "position-number";
-    positionNumber.textContent = position;
-
-    const input = document.createElement("input");
-    input.className = "team-input";
-    input.type = "text";
-    input.name = `position-${position}`;
-    input.id = `position-${position}`;
-    input.placeholder = "Select or type a club";
-    input.setAttribute("list", "clubOptions");
-    input.setAttribute("autocomplete", "off");
-    input.setAttribute("maxlength", "50");
-    input.required = true;
-
-    input.addEventListener("input", () => {
-      input.classList.remove("input-error");
-      updateProgress();
-      createClubOptions();
-      clearMessage();
-    });
-
-    row.appendChild(positionNumber);
-    row.appendChild(input);
-    leagueTable.appendChild(row);
-  }
-}
-
-function setCurrentDate() {
-  const today = new Date();
-
-  const localDate = new Date(
-    today.getTime() - today.getTimezoneOffset() * 60000
-  );
-
-  dateInput.value = localDate.toISOString().split("T")[0];
-}
-
-function updateProgress() {
-  const completedTeams = getTeamInputs().filter((input) => {
-    return input.value.trim() !== "";
-  }).length;
-
-  const completedBonuses = getBonusInputs().filter((input) => {
-    return input.value.trim() !== "";
-  }).length;
-
-  tableCount.textContent = completedTeams;
-  bonusCount.textContent = completedBonuses;
-}
-
-function findDuplicateTeams(values) {
-  const seen = new Set();
-  const duplicates = new Set();
-
-  values.forEach((value) => {
-    const normalisedValue = normaliseText(value);
-
-    if (!normalisedValue) {
-      return;
-    }
-
-    if (seen.has(normalisedValue)) {
-      duplicates.add(normalisedValue);
-    }
-
-    seen.add(normalisedValue);
-  });
-
-  return duplicates;
-}
-
-function clearErrors() {
-  document.querySelectorAll(".input-error").forEach((input) => {
-    input.classList.remove("input-error");
-  });
-}
-
-function showMessage(text, type = "error") {
-  messageBox.textContent = text;
-  messageBox.className = `message message--${type}`;
-
-  messageBox.scrollIntoView({
-    behavior: "smooth",
-    block: "center"
-  });
-}
-
-function clearMessage() {
-  messageBox.textContent = "";
-  messageBox.className = "message";
-}
-
-function validateForm() {
-  clearErrors();
-  clearMessage();
-
-  const nameInput = document.getElementById("name");
-  const teamInputs = getTeamInputs();
-  const bonusInputs = getBonusInputs();
-
-  let firstInvalidInput = null;
-  let missingFields = 0;
-
-  const requiredInputs = [
-    nameInput,
-    dateInput,
-    ...teamInputs,
-    ...bonusInputs
-  ];
-
-  requiredInputs.forEach((input) => {
-    if (!input.value.trim()) {
-      input.classList.add("input-error");
-      missingFields += 1;
-
-      if (!firstInvalidInput) {
-        firstInvalidInput = input;
-      }
-    }
-  });
-
-  if (missingFields > 0) {
-    showMessage(
-      `Please complete all fields before downloading. ${missingFields} field${
-        missingFields === 1 ? " is" : "s are"
-      } still empty.`
-    );
-
-    firstInvalidInput?.focus();
-    return false;
-  }
-
-  const teamValues = teamInputs.map((input) => {
-    return input.value.trim();
-  });
-
-  const duplicateTeams = findDuplicateTeams(teamValues);
-
-  if (duplicateTeams.size > 0) {
-    teamInputs.forEach((input) => {
-      if (
-        duplicateTeams.has(normaliseText(input.value))
-      ) {
-        input.classList.add("input-error");
-      }
-    });
-
-    showMessage(
-      "Each club can only be selected once. Please remove the highlighted duplicate teams."
-    );
-
-    document.querySelector(".team-input.input-error")?.focus();
-
-    return false;
-  }
-
-  return true;
-}
-
-function formatDateForPDF(dateValue) {
-  const date = new Date(`${dateValue}T00:00:00`);
-
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric"
-  }).format(date);
-}
 
 function safeFileName(value) {
-  return value
+  return String(value || "")
     .trim()
     .replace(/[^a-z0-9]+/gi, "-")
     .replace(/^-|-$/g, "");
 }
 
-function addRoundedBox(
-  pdf,
-  x,
-  y,
-  width,
-  height,
-  fillColour,
-  borderColour
-) {
-  pdf.setFillColor(...fillColour);
-  pdf.setDrawColor(...borderColour);
 
-  pdf.roundedRect(
-    x,
-    y,
-    width,
-    height,
-    2,
-    2,
-    "FD"
-  );
+function formatDateForDisplay(dateValue) {
+  if (!dateValue) {
+    return "";
+  }
+
+  const date = new Date(`${dateValue}T00:00:00`);
+
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  }).format(date);
 }
 
-function createPDF() {
-  const { jsPDF } = window.jspdf;
 
-  const pdf = new jsPDF({
-    orientation: "portrait",
-    unit: "mm",
-    format: "a4"
-  });
+/* ============================================================
+   START WEBSITE
+============================================================ */
 
-  const name = document
-    .getElementById("name")
-    .value
-    .trim();
+document.addEventListener("DOMContentLoaded", () => {
 
-  const selectedDate = dateInput.value;
+  /* ==========================================================
+     LIVE WEBSITE DOM ELEMENTS
+  ========================================================== */
 
-  const teams = getTeamInputs().map((input) => {
-    return input.value.trim();
-  });
+  const form =
+    document.getElementById("predictionForm");
 
-  const pageWidth =
-    pdf.internal.pageSize.getWidth();
+  const leagueTable =
+    document.getElementById("leagueTable");
 
-  const pageHeight =
-    pdf.internal.pageSize.getHeight();
+  const clubOptions =
+    document.getElementById("clubOptions");
 
-  /* =========================
-     PDF HEADER
-  ========================= */
+  const tableCount =
+    document.getElementById("tableCount");
 
-  pdf.setFillColor(7, 23, 63);
-  pdf.rect(
-    0,
-    0,
-    pageWidth,
-    36,
-    "F"
-  );
+  const bonusCount =
+    document.getElementById("bonusCount");
 
-  pdf.setTextColor(
-    255,
-    255,
-    255
-  );
+  const dateInput =
+    document.getElementById("predictionDate");
 
-  pdf.setFont(
-    "helvetica",
-    "bold"
-  );
+  const nameInput =
+    document.getElementById("name");
 
-  pdf.setFontSize(18);
+  const messageBox =
+    document.getElementById("message");
 
-  pdf.text(
-    "Commando Force 2026/27 Predictions",
-    12,
-    15
-  );
+  const downloadButton =
+    document.getElementById("downloadBtn");
 
-  pdf.setFont(
-    "helvetica",
-    "normal"
-  );
 
-  pdf.setFontSize(9);
+  /* ==========================================================
+     SAFETY CHECK
 
-  pdf.setTextColor(
-    205,
-    217,
-    245
-  );
+     If the main table container is somehow missing,
+     log the problem instead of crashing silently.
+  ========================================================== */
 
-  pdf.text(
-    `Name: ${name}`,
-    12,
-    26
-  );
+  if (!leagueTable) {
+    console.error(
+      "Commando Force error: #leagueTable could not be found."
+    );
 
-  pdf.text(
-    `Date: ${formatDateForPDF(selectedDate)}`,
-    108,
-    26
-  );
+    return;
+  }
 
-  /* =========================
-     LEAGUE TABLE
-  ========================= */
 
-  const tableX = 12;
-  const tableY = 43;
-  const tableWidth = 104;
-  const positionWidth = 13;
-  const rowHeight = 9.6;
+  /* ==========================================================
+     GET TEAM INPUTS
+  ========================================================== */
 
-  teams.forEach((team, index) => {
-    const position = index + 1;
-    const y = tableY + index * rowHeight;
+  function getTeamInputs() {
+    return Array.from(
+      document.querySelectorAll(".team-input")
+    );
+  }
 
-    let fillColour = [
-      255,
-      255,
-      255
-    ];
 
-    let positionColour = [
-      237,
-      241,
-      248
-    ];
+  /* ==========================================================
+     GET BONUS INPUTS
+  ========================================================== */
 
-    let borderColour = [
-      218,
-      224,
-      235
-    ];
+  function getBonusInputs() {
+    return bonusFields
+      .map((field) =>
+        document.getElementById(field.id)
+      )
+      .filter(Boolean);
+  }
 
-    let positionTextColour = [
-      52,
-      64,
-      91
-    ];
 
-    /* Champion */
-    if (position === 1) {
-      fillColour = [
-        255,
-        249,
-        223
-      ];
+  /* ==========================================================
+     CLEAR MESSAGE
+  ========================================================== */
 
-      positionColour = [
-        244,
-        197,
-        66
-      ];
-
-      borderColour = [
-        229,
-        187,
-        56
-      ];
-
-      positionTextColour = [
-        93,
-        66,
-        0
-      ];
+  function clearMessage() {
+    if (!messageBox) {
+      return;
     }
 
-    /* Champions League */
-    else if (
+    messageBox.textContent = "";
+    messageBox.className = "message";
+  }
+
+
+  /* ==========================================================
+     SHOW MESSAGE
+  ========================================================== */
+
+  function showMessage(
+    text,
+    type = "error"
+  ) {
+    if (!messageBox) {
+      return;
+    }
+
+    messageBox.textContent = text;
+
+    messageBox.className =
+      `message message--${type}`;
+
+    messageBox.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  }
+
+
+  /* ==========================================================
+     CLEAR INPUT ERRORS
+  ========================================================== */
+
+  function clearErrors() {
+    document
+      .querySelectorAll(".input-error")
+      .forEach((input) => {
+        input.classList.remove(
+          "input-error"
+        );
+      });
+  }
+
+
+  /* ==========================================================
+     UPDATE PROGRESS
+  ========================================================== */
+
+  function updateProgress() {
+    const teamInputs =
+      getTeamInputs();
+
+    const bonusInputs =
+      getBonusInputs();
+
+    const completedTeams =
+      teamInputs.filter((input) =>
+        input.value.trim() !== ""
+      ).length;
+
+    const completedBonuses =
+      bonusInputs.filter((input) =>
+        input.value.trim() !== ""
+      ).length;
+
+    if (tableCount) {
+      tableCount.textContent =
+        completedTeams;
+    }
+
+    if (bonusCount) {
+      bonusCount.textContent =
+        completedBonuses;
+    }
+  }
+
+
+  /* ==========================================================
+     BUILD CLUB DROPDOWN
+
+     Clubs already selected disappear from the datalist.
+  ========================================================== */
+
+  function createClubOptions() {
+    if (!clubOptions) {
+      return;
+    }
+
+    const selectedTeams =
+      getTeamInputs()
+        .map((input) =>
+          normaliseText(input.value)
+        )
+        .filter(Boolean);
+
+    clubOptions.innerHTML = "";
+
+    clubs.forEach((club) => {
+      const normalisedClub =
+        normaliseText(club);
+
+      if (
+        !selectedTeams.includes(
+          normalisedClub
+        )
+      ) {
+        const option =
+          document.createElement(
+            "option"
+          );
+
+        option.value = club;
+
+        clubOptions.appendChild(
+          option
+        );
+      }
+    });
+  }
+
+
+  /* ==========================================================
+     CREATE 20 LEAGUE ROWS
+
+     THIS RUNS BEFORE ANY PDF CODE.
+  ========================================================== */
+
+  function createLeagueTable() {
+    leagueTable.innerHTML = "";
+
+    for (
+      let position = 1;
+      position <= 20;
+      position += 1
+    ) {
+      const row =
+        document.createElement(
+          "div"
+        );
+
+      row.className =
+        "prediction-row";
+
+
+      const positionNumber =
+        document.createElement(
+          "div"
+        );
+
+      positionNumber.className =
+        "position-number";
+
+      positionNumber.textContent =
+        position;
+
+
+      const input =
+        document.createElement(
+          "input"
+        );
+
+      input.className =
+        "team-input";
+
+      input.type = "text";
+
+      input.name =
+        `position-${position}`;
+
+      input.id =
+        `position-${position}`;
+
+      input.placeholder =
+        "Select or type a club";
+
+      input.setAttribute(
+        "list",
+        "clubOptions"
+      );
+
+      input.setAttribute(
+        "autocomplete",
+        "off"
+      );
+
+      input.setAttribute(
+        "maxlength",
+        "50"
+      );
+
+      input.required = true;
+
+
+      input.addEventListener(
+        "input",
+        () => {
+          input.classList.remove(
+            "input-error"
+          );
+
+          updateProgress();
+
+          createClubOptions();
+
+          clearMessage();
+        }
+      );
+
+
+      row.appendChild(
+        positionNumber
+      );
+
+      row.appendChild(
+        input
+      );
+
+      leagueTable.appendChild(
+        row
+      );
+    }
+  }
+
+
+  /* ==========================================================
+     SET TODAY'S DATE
+  ========================================================== */
+
+  function setCurrentDate() {
+    if (!dateInput) {
+      return;
+    }
+
+    const today =
+      new Date();
+
+    const localDate =
+      new Date(
+        today.getTime() -
+          today.getTimezoneOffset() *
+            60000
+      );
+
+    dateInput.value =
+      localDate
+        .toISOString()
+        .split("T")[0];
+  }
+
+
+  /* ==========================================================
+     DUPLICATE CHECK
+  ========================================================== */
+
+  function findDuplicateTeams(
+    values
+  ) {
+    const seen =
+      new Set();
+
+    const duplicates =
+      new Set();
+
+    values.forEach((value) => {
+      const normalisedValue =
+        normaliseText(value);
+
+      if (!normalisedValue) {
+        return;
+      }
+
+      if (
+        seen.has(
+          normalisedValue
+        )
+      ) {
+        duplicates.add(
+          normalisedValue
+        );
+      }
+
+      seen.add(
+        normalisedValue
+      );
+    });
+
+    return duplicates;
+  }
+
+
+  /* ==========================================================
+     CHECK CLUB NAMES
+
+     This makes sure users haven't typed a team
+     that is not one of the 20 valid clubs.
+  ========================================================== */
+
+  function findInvalidTeams(
+    values
+  ) {
+    const validClubs =
+      clubs.map((club) =>
+        normaliseText(club)
+      );
+
+    return values.filter(
+      (value) =>
+        !validClubs.includes(
+          normaliseText(value)
+        )
+    );
+  }
+
+
+  /* ==========================================================
+     FORM VALIDATION
+  ========================================================== */
+
+  function validateForm() {
+    clearErrors();
+
+    clearMessage();
+
+
+    const teamInputs =
+      getTeamInputs();
+
+    const bonusInputs =
+      getBonusInputs();
+
+
+    const requiredInputs = [
+      nameInput,
+      dateInput,
+      ...teamInputs,
+      ...bonusInputs
+    ].filter(Boolean);
+
+
+    let firstInvalidInput =
+      null;
+
+    let missingFields = 0;
+
+
+    requiredInputs.forEach(
+      (input) => {
+        if (
+          !input.value.trim()
+        ) {
+          input.classList.add(
+            "input-error"
+          );
+
+          missingFields += 1;
+
+          if (
+            !firstInvalidInput
+          ) {
+            firstInvalidInput =
+              input;
+          }
+        }
+      }
+    );
+
+
+    if (missingFields > 0) {
+      showMessage(
+        `Please complete all fields before downloading. ${missingFields} field${
+          missingFields === 1
+            ? " is"
+            : "s are"
+        } still empty.`
+      );
+
+      firstInvalidInput?.focus();
+
+      return false;
+    }
+
+
+    const teamValues =
+      teamInputs.map(
+        (input) =>
+          input.value.trim()
+      );
+
+
+    /* ========================================================
+       INVALID CLUB CHECK
+    ======================================================== */
+
+    const invalidTeams =
+      findInvalidTeams(
+        teamValues
+      );
+
+
+    if (
+      invalidTeams.length > 0
+    ) {
+      teamInputs.forEach(
+        (input) => {
+          const isValid =
+            clubs.some(
+              (club) =>
+                normaliseText(
+                  club
+                ) ===
+                normaliseText(
+                  input.value
+                )
+            );
+
+          if (!isValid) {
+            input.classList.add(
+              "input-error"
+            );
+          }
+        }
+      );
+
+      showMessage(
+        "Please select clubs from the official Premier League list."
+      );
+
+      document
+        .querySelector(
+          ".team-input.input-error"
+        )
+        ?.focus();
+
+      return false;
+    }
+
+
+    /* ========================================================
+       DUPLICATE CLUB CHECK
+    ======================================================== */
+
+    const duplicateTeams =
+      findDuplicateTeams(
+        teamValues
+      );
+
+
+    if (
+      duplicateTeams.size > 0
+    ) {
+      teamInputs.forEach(
+        (input) => {
+          if (
+            duplicateTeams.has(
+              normaliseText(
+                input.value
+              )
+            )
+          ) {
+            input.classList.add(
+              "input-error"
+            );
+          }
+        }
+      );
+
+      showMessage(
+        "Each club can only be selected once. Please remove the highlighted duplicate teams."
+      );
+
+      document
+        .querySelector(
+          ".team-input.input-error"
+        )
+        ?.focus();
+
+      return false;
+    }
+
+
+    return true;
+  }
+
+
+  /* ==========================================================
+     PDF POSITION CLASS
+  ========================================================== */
+
+  function getPdfRowClass(
+    position
+  ) {
+    if (position === 1) {
+      return "pdf-league-row--champion";
+    }
+
+    if (
       position >= 2 &&
       position <= 5
     ) {
-      fillColour = [
-        241,
-        245,
-        255
-      ];
-
-      positionColour = [
-        71,
-        112,
-        224
-      ];
-
-      borderColour = [
-        124,
-        155,
-        231
-      ];
-
-      positionTextColour = [
-        255,
-        255,
-        255
-      ];
+      return "pdf-league-row--ucl";
     }
 
-    /* Europa League */
-    else if (position === 6) {
-      fillColour = [
-        255,
-        247,
-        236
-      ];
-
-      positionColour = [
-        243,
-        154,
-        47
-      ];
-
-      borderColour = [
-        232,
-        168,
-        90
-      ];
-
-      positionTextColour = [
-        255,
-        255,
-        255
-      ];
+    if (position === 6) {
+      return "pdf-league-row--europa";
     }
 
-    /* Conference League */
-    else if (position === 7) {
-      fillColour = [
-        239,
-        252,
-        245
-      ];
-
-      positionColour = [
-        22,
-        147,
-        111
-      ];
-
-      borderColour = [
-        111,
-        198,
-        166
-      ];
-
-      positionTextColour = [
-        255,
-        255,
-        255
-      ];
+    if (position === 7) {
+      return "pdf-league-row--conference";
     }
 
-    /* Relegation */
-    else if (position >= 18) {
-      fillColour = [
-        255,
-        241,
-        243
-      ];
-
-      positionColour = [
-        217,
-        39,
-        56
-      ];
-
-      borderColour = [
-        231,
-        130,
-        140
-      ];
-
-      positionTextColour = [
-        255,
-        255,
-        255
-      ];
+    if (position >= 18) {
+      return "pdf-league-row--relegation";
     }
 
-    addRoundedBox(
-      pdf,
-      tableX,
-      y,
-      tableWidth,
-      rowHeight - 0.7,
-      fillColour,
-      borderColour
-    );
+    return "";
+  }
 
-    pdf.setFillColor(
-      ...positionColour
-    );
 
-    pdf.roundedRect(
-      tableX,
-      y,
-      positionWidth,
-      rowHeight - 0.7,
-      2,
-      2,
-      "F"
-    );
+  /* ==========================================================
+     POPULATE PDF TEMPLATE
 
-    pdf.rect(
-      tableX + positionWidth - 2,
-      y,
-      2,
-      rowHeight - 0.7,
-      "F"
-    );
+     PDF elements are only fetched HERE.
+     They are not touched during normal page startup.
+  ========================================================== */
 
-    pdf.setTextColor(
-      ...positionTextColour
-    );
+  function populatePdfTemplate() {
+    const pdfName =
+      document.getElementById(
+        "pdfName"
+      );
 
-    pdf.setFont(
-      "helvetica",
-      "bold"
-    );
+    const pdfDate =
+      document.getElementById(
+        "pdfDate"
+      );
 
-    pdf.setFontSize(8.5);
+    const pdfLeagueRows =
+      document.getElementById(
+        "pdfLeagueRows"
+      );
 
-    pdf.text(
-      position === 1
-        ? "C."
-        : `${position}.`,
-      tableX + positionWidth / 2,
-      y + 6.1,
-      {
-        align: "center"
+
+    if (
+      !pdfName ||
+      !pdfDate ||
+      !pdfLeagueRows
+    ) {
+      throw new Error(
+        "Premium PDF template is missing required elements."
+      );
+    }
+
+
+    pdfName.textContent =
+      nameInput.value.trim();
+
+    pdfDate.textContent =
+      formatDateForDisplay(
+        dateInput.value
+      );
+
+
+    /* ========================================================
+       PDF LEAGUE TABLE
+    ======================================================== */
+
+    pdfLeagueRows.innerHTML =
+      "";
+
+
+    const teams =
+      getTeamInputs().map(
+        (input) =>
+          input.value.trim()
+      );
+
+
+    teams.forEach(
+      (team, index) => {
+        const position =
+          index + 1;
+
+
+        const row =
+          document.createElement(
+            "div"
+          );
+
+        row.className =
+          "pdf-league-row";
+
+
+        const specialClass =
+          getPdfRowClass(
+            position
+          );
+
+
+        if (specialClass) {
+          row.classList.add(
+            specialClass
+          );
+        }
+
+
+        const positionElement =
+          document.createElement(
+            "div"
+          );
+
+        positionElement.className =
+          "pdf-league-row__position";
+
+        positionElement.textContent =
+          position === 1
+            ? "C."
+            : position;
+
+
+        const teamElement =
+          document.createElement(
+            "div"
+          );
+
+        teamElement.className =
+          "pdf-league-row__team";
+
+        teamElement.textContent =
+          team;
+
+
+        row.appendChild(
+          positionElement
+        );
+
+        row.appendChild(
+          teamElement
+        );
+
+        pdfLeagueRows.appendChild(
+          row
+        );
       }
     );
 
-    pdf.setTextColor(
-      25,
-      35,
-      58
-    );
 
-    pdf.setFont(
-      "helvetica",
-      "bold"
-    );
+    /* ========================================================
+       PDF BONUS PREDICTIONS
+    ======================================================== */
 
-    pdf.setFontSize(8.7);
+    bonusFields.forEach(
+      (field) => {
+        const liveField =
+          document.getElementById(
+            field.id
+          );
 
-    pdf.text(
-      team,
-      tableX + positionWidth + 4,
-      y + 6.1,
-      {
-        maxWidth:
-          tableWidth -
-          positionWidth -
-          8
+        const pdfField =
+          document.getElementById(
+            field.pdfId
+          );
+
+
+        if (
+          liveField &&
+          pdfField
+        ) {
+          pdfField.textContent =
+            liveField.value.trim();
+        }
       }
     );
-  });
+  }
 
-  /* =========================
-     SIDEBAR
-  ========================= */
 
-  const sideX = 123;
-  const sideWidth = 75;
+  /* ==========================================================
+     WAIT FOR FONTS
+  ========================================================== */
 
-  /* =========================
-     LEADERBOARD
-  ========================= */
+  async function waitForFonts() {
+    if (
+      document.fonts &&
+      document.fonts.ready
+    ) {
+      try {
+        await document.fonts.ready;
+      } catch (error) {
+        console.warn(
+          "Font loading warning:",
+          error
+        );
+      }
+    }
+  }
 
-  addRoundedBox(
-    pdf,
-    sideX,
-    43,
-    sideWidth,
-    61,
-    [
-      249,
-      250,
-      253
-    ],
-    [
-      219,
-      225,
-      236
-    ]
-  );
 
-  pdf.setTextColor(
-    27,
-    39,
-    69
-  );
+  /* ==========================================================
+     WAIT FOR NEXT RENDER
+  ========================================================== */
 
-  pdf.setFont(
-    "helvetica",
-    "bold"
-  );
+  function waitForRender() {
+    return new Promise(
+      (resolve) => {
+        requestAnimationFrame(
+          () => {
+            requestAnimationFrame(
+              resolve
+            );
+          }
+        );
+      }
+    );
+  }
 
-  pdf.setFontSize(11);
 
-  pdf.text(
-    "2025/26 Leaderboard",
-    sideX + 5,
-    51
-  );
+  /* ==========================================================
+     CREATE PREMIUM PDF
+  ========================================================== */
 
-  leaderboard.forEach(
-    (entry, index) => {
-      const y =
-        60 +
-        index * 8.5;
+  async function createPremiumPDF() {
 
-      pdf.setFontSize(8.6);
+    /* ========================================================
+       CHECK LIBRARIES
+    ======================================================== */
 
-      pdf.setFont(
-        "helvetica",
-        index === 0
-          ? "bold"
-          : "normal"
+    if (
+      typeof window.html2canvas !==
+      "function"
+    ) {
+      throw new Error(
+        "html2canvas has not loaded."
+      );
+    }
+
+
+    if (
+      !window.jspdf ||
+      !window.jspdf.jsPDF
+    ) {
+      throw new Error(
+        "jsPDF has not loaded."
+      );
+    }
+
+
+    const pdfDocument =
+      document.getElementById(
+        "pdfDocument"
       );
 
-      pdf.setTextColor(
-        31,
-        43,
-        69
-      );
 
-      pdf.text(
-        `${entry.position}  ${entry.name}`,
-        sideX + 5,
-        y
+    if (!pdfDocument) {
+      throw new Error(
+        "#pdfDocument could not be found."
       );
+    }
 
-      pdf.text(
-        `${entry.points} pts`,
-        sideX +
-          sideWidth -
-          5,
-        y,
+
+    populatePdfTemplate();
+
+
+    await waitForFonts();
+
+    await waitForRender();
+
+
+    /* ========================================================
+       CAPTURE PDF HTML
+    ======================================================== */
+
+    const canvas =
+      await window.html2canvas(
+        pdfDocument,
         {
-          align: "right"
+          scale: 2.5,
+
+          backgroundColor:
+            "#ffffff",
+
+          useCORS: true,
+
+          allowTaint: false,
+
+          logging: false,
+
+          width: 794,
+
+          height: 1123,
+
+          windowWidth: 794,
+
+          windowHeight: 1123,
+
+          scrollX: 0,
+
+          scrollY: 0
+        }
+      );
+
+
+    /* ========================================================
+       CONVERT TO IMAGE
+    ======================================================== */
+
+    const imageData =
+      canvas.toDataURL(
+        "image/jpeg",
+        0.96
+      );
+
+
+    /* ========================================================
+       CREATE A4 PDF
+    ======================================================== */
+
+    const { jsPDF } =
+      window.jspdf;
+
+
+    const pdf =
+      new jsPDF({
+        orientation:
+          "portrait",
+
+        unit:
+          "mm",
+
+        format:
+          "a4",
+
+        compress:
+          true
+      });
+
+
+    const pageWidth =
+      pdf.internal.pageSize
+        .getWidth();
+
+
+    const pageHeight =
+      pdf.internal.pageSize
+        .getHeight();
+
+
+    pdf.addImage(
+      imageData,
+      "JPEG",
+      0,
+      0,
+      pageWidth,
+      pageHeight,
+      undefined,
+      "FAST"
+    );
+
+
+    /* ========================================================
+       DOWNLOAD FILENAME
+    ======================================================== */
+
+    const name =
+      nameInput.value.trim();
+
+
+    const safeName =
+      safeFileName(name) ||
+      "Predictions";
+
+
+    pdf.save(
+      `CommandoForce-2026-27-${safeName}.pdf`
+    );
+  }
+
+
+  /* ==========================================================
+     BONUS INPUT EVENTS
+  ========================================================== */
+
+  getBonusInputs().forEach(
+    (input) => {
+      input.addEventListener(
+        "input",
+        () => {
+          input.classList.remove(
+            "input-error"
+          );
+
+          updateProgress();
+
+          clearMessage();
         }
       );
     }
   );
 
-  /* =========================
-     FPL CHAMPION
-  ========================= */
 
-  addRoundedBox(
-    pdf,
-    sideX,
-    109,
-    sideWidth,
-    27,
-    [
-      255,
-      249,
-      224
-    ],
-    [
-      231,
-      202,
-      108
-    ]
-  );
+  /* ==========================================================
+     NAME EVENT
+  ========================================================== */
 
-  pdf.setTextColor(
-    138,
-    104,
-    19
-  );
+  if (nameInput) {
+    nameInput.addEventListener(
+      "input",
+      () => {
+        nameInput.classList.remove(
+          "input-error"
+        );
 
-  pdf.setFont(
-    "helvetica",
-    "bold"
-  );
-
-  pdf.setFontSize(7.5);
-
-  pdf.text(
-    "FANTASY PREMIER LEAGUE",
-    sideX + 5,
-    117
-  );
-
-  pdf.setTextColor(
-    55,
-    44,
-    17
-  );
-
-  pdf.setFontSize(11);
-
-  pdf.text(
-    "FPL Champ: Minzzy",
-    sideX + 5,
-    126
-  );
-
-  pdf.setFont(
-    "helvetica",
-    "normal"
-  );
-
-  pdf.setTextColor(
-    121,
-    103,
-    57
-  );
-
-  pdf.setFontSize(7.5);
-
-  pdf.text(
-    "2025/26 winner",
-    sideX + 5,
-    132
-  );
-
-  /* =========================
-     BONUS PREDICTIONS
-  ========================= */
-
-  addRoundedBox(
-    pdf,
-    sideX,
-    142,
-    sideWidth,
-    85,
-    [
-      255,
-      255,
-      255
-    ],
-    [
-      219,
-      225,
-      236
-    ]
-  );
-
-  pdf.setTextColor(
-    27,
-    39,
-    69
-  );
-
-  pdf.setFont(
-    "helvetica",
-    "bold"
-  );
-
-  pdf.setFontSize(11);
-
-  pdf.text(
-    "Bonus Predictions",
-    sideX + 5,
-    151
-  );
-
-  pdf.setTextColor(
-    111,
-    119,
-    139
-  );
-
-  pdf.setFont(
-    "helvetica",
-    "normal"
-  );
-
-  pdf.setFontSize(6.8);
-
-  pdf.text(
-    "Minus 2 points for every correct prediction",
-    sideX + 5,
-    156
-  );
-
-  let bonusY = 164;
-
-  bonusFields.forEach((field) => {
-    const value = document
-      .getElementById(field.id)
-      .value
-      .trim();
-
-    pdf.setFont(
-      "helvetica",
-      "bold"
+        clearMessage();
+      }
     );
+  }
 
-    pdf.setFontSize(7.2);
 
-    pdf.setTextColor(
-      89,
-      100,
-      123
+  /* ==========================================================
+     DATE EVENT
+  ========================================================== */
+
+  if (dateInput) {
+    dateInput.addEventListener(
+      "change",
+      () => {
+        dateInput.classList.remove(
+          "input-error"
+        );
+
+        clearMessage();
+      }
     );
+  }
 
-    pdf.text(
-      field.label.toUpperCase(),
-      sideX + 5,
-      bonusY
+
+  /* ==========================================================
+     FORM SUBMISSION
+  ========================================================== */
+
+  if (form) {
+    form.addEventListener(
+      "submit",
+      async (event) => {
+        event.preventDefault();
+
+
+        if (
+          !validateForm()
+        ) {
+          return;
+        }
+
+
+        const buttonText =
+          downloadButton
+            ?.querySelector(
+              "span"
+            );
+
+
+        if (downloadButton) {
+          downloadButton.disabled =
+            true;
+        }
+
+
+        if (buttonText) {
+          buttonText.textContent =
+            "Creating premium PDF...";
+        }
+
+
+        try {
+          await createPremiumPDF();
+
+
+          showMessage(
+            "Your premium prediction PDF has been downloaded.",
+            "success"
+          );
+        } catch (error) {
+          console.error(
+            "Premium PDF generation error:",
+            error
+          );
+
+
+          showMessage(
+            "The PDF could not be created. Please refresh the page and try again."
+          );
+        } finally {
+
+          if (downloadButton) {
+            downloadButton.disabled =
+              false;
+          }
+
+
+          if (buttonText) {
+            buttonText.textContent =
+              "Download prediction PDF";
+          }
+        }
+      }
     );
+  }
 
-    pdf.setFont(
-      "helvetica",
-      "normal"
-    );
 
-    pdf.setFontSize(8.4);
+  /* ==========================================================
+     INITIALISE LIVE WEBSITE
 
-    pdf.setTextColor(
-      27,
-      39,
-      69
-    );
+     IMPORTANT:
+     These happen LAST in this script but before any user PDF
+     action, and none rely on premium-PDF elements.
+  ========================================================== */
 
-    const wrappedValue =
-      pdf.splitTextToSize(
-        value,
-        sideWidth - 10
-      );
+  try {
+    createLeagueTable();
 
-    pdf.text(
-      wrappedValue,
-      sideX + 5,
-      bonusY + 5
-    );
+    setCurrentDate();
 
-    bonusY +=
-      wrappedValue.length > 1
-        ? 14
-        : 11.5;
-  });
+    createClubOptions();
 
-  /* =========================
-     FOOTER
-  ========================= */
-
-  pdf.setDrawColor(
-    219,
-    225,
-    236
-  );
-
-  pdf.line(
-    12,
-    245,
-    pageWidth - 12,
-    245
-  );
-
-  pdf.setTextColor(
-    104,
-    113,
-    132
-  );
-
-  pdf.setFont(
-    "helvetica",
-    "italic"
-  );
-
-  pdf.setFontSize(8);
-
-  pdf.text(
-    "Predictions are final — no changes after submission!",
-    pageWidth / 2,
-    253,
-    {
-      align: "center"
-    }
-  );
-
-  pdf.setTextColor(
-    150,
-    157,
-    171
-  );
-
-  pdf.setFont(
-    "helvetica",
-    "normal"
-  );
-
-  pdf.setFontSize(7);
-
-  pdf.text(
-    "Commando Force · 2026/27",
-    pageWidth / 2,
-    pageHeight - 9,
-    {
-      align: "center"
-    }
-  );
-
-  const fileName =
-    `CommandoForce-2026-27-${safeFileName(name)}.pdf`;
-
-  pdf.save(fileName);
-}
-
-/* =========================
-   INPUT EVENTS
-========================= */
-
-getBonusInputs().forEach((input) => {
-  input.addEventListener("input", () => {
-    input.classList.remove("input-error");
     updateProgress();
-    clearMessage();
-  });
-});
 
-document
-  .getElementById("name")
-  .addEventListener(
-    "input",
-    (event) => {
-      event.target.classList.remove(
-        "input-error"
-      );
-
-      clearMessage();
-    }
-  );
-
-dateInput.addEventListener(
-  "change",
-  () => {
-    dateInput.classList.remove(
-      "input-error"
+    console.log(
+      "Commando Force website initialised successfully."
     );
-
-    clearMessage();
+  } catch (error) {
+    console.error(
+      "Commando Force website initialisation error:",
+      error
+    );
   }
-);
 
-/* =========================
-   DOWNLOAD PDF
-========================= */
-
-form.addEventListener(
-  "submit",
-  (event) => {
-    event.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    downloadButton.disabled = true;
-
-    downloadButton
-      .querySelector("span")
-      .textContent =
-      "Creating PDF...";
-
-    try {
-      createPDF();
-
-      showMessage(
-        "Your prediction PDF has been downloaded.",
-        "success"
-      );
-    } catch (error) {
-      console.error(error);
-
-      showMessage(
-        "The PDF could not be created. Please refresh the page and try again."
-      );
-    } finally {
-      downloadButton.disabled = false;
-
-      downloadButton
-        .querySelector("span")
-        .textContent =
-        "Download prediction PDF";
-    }
-  }
-);
-
-/* =========================
-   INITIALISE
-========================= */
-
-createLeagueTable();
-createClubOptions();
-setCurrentDate();
-updateProgress();
+});
