@@ -1,20 +1,33 @@
 <link rel="stylesheet" href="style.css">
 
+<!-- =========================================================
+     WEBSITE
+========================================================= -->
+
 <header class="hero">
   <div class="hero__glow hero__glow--one"></div>
   <div class="hero__glow hero__glow--two"></div>
 
   <div class="hero__inner">
-    <p class="eyebrow">Commando Force</p>
 
-    <h1>2026/27 League Predictions</h1>
+    <p class="eyebrow">
+      Commando Force
+    </p>
+
+    <h1>
+      2026/27 League Predictions
+    </h1>
 
     <p class="hero__copy">
       Build your final Premier League table, complete the bonus picks
       and export your official prediction sheet.
     </p>
 
-    <div class="hero__badges" aria-label="Prediction colour key">
+    <div
+      class="hero__badges"
+      aria-label="Prediction colour key"
+    >
+
       <span>
         <i class="key key--champion"></i>
         Champion
@@ -39,16 +52,31 @@
         <i class="key key--relegation"></i>
         Relegation
       </span>
+
     </div>
+
   </div>
 </header>
 
+
 <main class="shell">
-  <form id="predictionForm" novalidate>
+
+  <form
+    id="predictionForm"
+    novalidate
+  >
+
+    <!-- =====================================================
+         NAME + DATE
+    ====================================================== -->
 
     <section class="identity-card card">
+
       <div class="field">
-        <label for="name">Your name</label>
+
+        <label for="name">
+          Your name
+        </label>
 
         <input
           id="name"
@@ -58,124 +86,272 @@
           autocomplete="name"
           maxlength="40"
           required
-        />
+        >
+
       </div>
 
+
       <div class="field field--date">
-        <label for="predictionDate">Date</label>
+
+        <label for="predictionDate">
+          Date
+        </label>
 
         <input
           id="predictionDate"
           name="predictionDate"
           type="date"
           required
-        />
+        >
+
       </div>
+
     </section>
+
+
+    <!-- =====================================================
+         MAIN GRID
+    ====================================================== -->
 
     <div class="page-grid">
 
+
+      <!-- ===================================================
+           PREMIER LEAGUE TABLE
+      ==================================================== -->
+
       <section class="table-panel card">
+
         <div class="section-heading">
+
           <div>
-            <p class="section-kicker">Main prediction</p>
-            <h2>Premier League table</h2>
+
+            <p class="section-kicker">
+              Main prediction
+            </p>
+
+            <h2>
+              Premier League table
+            </h2>
+
           </div>
 
+
           <span class="progress-pill">
-            <strong id="tableCount">0</strong>/20 selected
+
+            <strong id="tableCount">
+              0
+            </strong>/20 selected
+
           </span>
+
         </div>
 
-        <div id="leagueTable" class="league-table"></div>
+
+        <!--
+          JavaScript inserts the 20 prediction rows here.
+        -->
+
+        <div
+          id="leagueTable"
+          class="league-table"
+        ></div>
+
       </section>
+
+
+      <!-- ===================================================
+           SIDEBAR
+      ==================================================== -->
 
       <aside class="sidebar">
 
+
+        <!-- =================================================
+             LEADERBOARD
+        ================================================== -->
+
         <section class="leaderboard card">
+
           <div class="section-heading section-heading--compact">
+
             <div>
-              <p class="section-kicker">Last season</p>
-              <h2>2025/26 leaderboard</h2>
+
+              <p class="section-kicker">
+                Last season
+              </p>
+
+              <h2>
+                2025/26 leaderboard
+              </h2>
+
             </div>
+
           </div>
 
+
           <ol class="leaderboard-list">
+
             <li>
-              <span class="medal medal--gold">1</span>
+
+              <span class="medal medal--gold">
+                1
+              </span>
+
               <div>
                 <strong>Minzzy</strong>
                 <small>76 points</small>
               </div>
+
             </li>
 
+
             <li>
-              <span class="medal medal--silver">2</span>
+
+              <span class="medal medal--silver">
+                2
+              </span>
+
               <div>
                 <strong>Hussein</strong>
                 <small>80 points</small>
               </div>
+
             </li>
 
+
             <li>
-              <span class="medal medal--bronze">3</span>
+
+              <span class="medal medal--bronze">
+                3
+              </span>
+
               <div>
                 <strong>Waji</strong>
                 <small>84 points</small>
               </div>
+
             </li>
 
+
             <li>
-              <span class="medal">4</span>
+
+              <span class="medal">
+                4
+              </span>
+
               <div>
                 <strong>Shami</strong>
                 <small>92 points</small>
               </div>
+
             </li>
 
+
             <li>
-              <span class="medal">5</span>
+
+              <span class="medal">
+                5
+              </span>
+
               <div>
                 <strong>Shabal</strong>
                 <small>96 points</small>
               </div>
+
             </li>
+
           </ol>
+
         </section>
 
+
+        <!-- =================================================
+             FPL CHAMPION
+        ================================================== -->
+
         <section class="fpl-card card">
-          <div class="trophy" aria-hidden="true">★</div>
+
+          <div
+            class="trophy"
+            aria-hidden="true"
+          >
+            ★
+          </div>
+
 
           <div>
-            <p>Fantasy Premier League</p>
-            <h2>FPL Champ: Minzzy</h2>
-            <span>2025/26 winner</span>
+
+            <p>
+              Fantasy Premier League
+            </p>
+
+            <h2>
+              FPL Champ: Minzzy
+            </h2>
+
+            <span>
+              2025/26 winner
+            </span>
+
           </div>
+
         </section>
 
       </aside>
+
     </div>
 
+
+    <!-- =====================================================
+         BONUS PREDICTIONS
+    ====================================================== -->
+
     <section class="bonus-panel card">
+
       <div class="section-heading">
+
         <div>
-          <p class="section-kicker">Extra points</p>
+
+          <p class="section-kicker">
+            Extra points
+          </p>
+
 
           <div class="bonus-title">
-            <h2>Bonus predictions</h2>
-            <span>(Minus 2 points for every correct prediction)</span>
+
+            <h2>
+              Bonus predictions
+            </h2>
+
+            <span>
+              (Minus 2 points for every correct prediction)
+            </span>
+
           </div>
+
         </div>
 
+
         <span class="progress-pill">
-          <strong id="bonusCount">0</strong>/6 completed
+
+          <strong id="bonusCount">
+            0
+          </strong>/6 completed
+
         </span>
+
       </div>
+
 
       <div class="bonus-grid">
 
+
         <div class="field">
-          <label for="topScorer">Top Scorer</label>
+
+          <label for="topScorer">
+            Top Scorer
+          </label>
 
           <input
             id="topScorer"
@@ -184,11 +360,16 @@
             placeholder="Player name"
             maxlength="50"
             required
-          />
+          >
+
         </div>
 
+
         <div class="field">
-          <label for="mostAssists">Most Assists</label>
+
+          <label for="mostAssists">
+            Most Assists
+          </label>
 
           <input
             id="mostAssists"
@@ -197,11 +378,16 @@
             placeholder="Player name"
             maxlength="50"
             required
-          />
+          >
+
         </div>
 
+
         <div class="field">
-          <label for="faCupWinner">FA Cup Winner</label>
+
+          <label for="faCupWinner">
+            FA Cup Winner
+          </label>
 
           <input
             id="faCupWinner"
@@ -210,11 +396,16 @@
             placeholder="Club name"
             maxlength="50"
             required
-          />
+          >
+
         </div>
 
+
         <div class="field">
-          <label for="carabaoCupWinner">Carabao Cup Winner</label>
+
+          <label for="carabaoCupWinner">
+            Carabao Cup Winner
+          </label>
 
           <input
             id="carabaoCupWinner"
@@ -223,11 +414,16 @@
             placeholder="Club name"
             maxlength="50"
             required
-          />
+          >
+
         </div>
 
+
         <div class="field">
-          <label for="firstSacked">First Manager to be Sacked</label>
+
+          <label for="firstSacked">
+            First Manager to be Sacked
+          </label>
 
           <input
             id="firstSacked"
@@ -236,11 +432,16 @@
             placeholder="Manager name"
             maxlength="50"
             required
-          />
+          >
+
         </div>
 
+
         <div class="field">
-          <label for="goldenGlove">Golden Glove</label>
+
+          <label for="goldenGlove">
+            Golden Glove
+          </label>
 
           <input
             id="goldenGlove"
@@ -249,11 +450,18 @@
             placeholder="Goalkeeper name"
             maxlength="50"
             required
-          />
+          >
+
         </div>
 
       </div>
+
     </section>
+
+
+    <!-- =====================================================
+         VALIDATION / SUCCESS MESSAGE
+    ====================================================== -->
 
     <div
       id="message"
@@ -262,36 +470,670 @@
       aria-live="polite"
     ></div>
 
+
+    <!-- =====================================================
+         DOWNLOAD
+    ====================================================== -->
+
     <section class="submit-card card">
+
       <div>
-        <p class="submit-card__title">Ready to lock it in?</p>
+
+        <p class="submit-card__title">
+          Ready to lock it in?
+        </p>
 
         <p>
           Predictions are final — no changes after submission.
         </p>
+
       </div>
+
 
       <button
         id="downloadBtn"
         class="download-btn"
         type="submit"
       >
-        <span>Download prediction PDF</span>
 
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14" />
+        <span>
+          Download prediction PDF
+        </span>
+
+
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+
+          <path
+            d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14"
+          ></path>
+
         </svg>
+
       </button>
+
     </section>
 
   </form>
+
 </main>
 
-<footer>
+
+<footer class="site-footer">
   Commando Force · 2026/27
 </footer>
 
+
+<!-- =========================================================
+     CLUB AUTOCOMPLETE OPTIONS
+========================================================= -->
+
 <datalist id="clubOptions"></datalist>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- =========================================================
+     PREMIUM PDF TEMPLATE
+
+     This sits off-screen and is only used when generating
+     the downloaded PDF.
+========================================================= -->
+
+<div
+  id="pdfRenderArea"
+  class="pdf-render-area"
+>
+
+  <article
+    id="pdfDocument"
+    class="pdf-document"
+  >
+
+
+    <!-- =====================================================
+         PDF HEADER
+    ====================================================== -->
+
+    <header class="pdf-header">
+
+      <div class="pdf-header__glow pdf-header__glow--one"></div>
+      <div class="pdf-header__glow pdf-header__glow--two"></div>
+
+
+      <div class="pdf-header__content">
+
+
+        <div class="pdf-brand">
+
+          <div class="pdf-brand__mark">
+            CF
+          </div>
+
+
+          <div>
+
+            <p class="pdf-brand__eyebrow">
+              Commando Force
+            </p>
+
+            <h1>
+              2026/27 League Predictions
+            </h1>
+
+          </div>
+
+        </div>
+
+
+        <div class="pdf-meta">
+
+          <div class="pdf-meta__item">
+
+            <span class="pdf-meta__label">
+              Submitted by
+            </span>
+
+            <strong id="pdfName">
+              —
+            </strong>
+
+          </div>
+
+
+          <div class="pdf-meta__divider"></div>
+
+
+          <div class="pdf-meta__item">
+
+            <span class="pdf-meta__label">
+              Date
+            </span>
+
+            <strong id="pdfDate">
+              —
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         PDF BODY
+    ====================================================== -->
+
+    <div class="pdf-body">
+
+
+      <!-- ===================================================
+           PDF LEGEND
+      ==================================================== -->
+
+      <section class="pdf-legend">
+
+        <div class="pdf-legend__item">
+
+          <span
+            class="pdf-legend__dot pdf-legend__dot--champion"
+          ></span>
+
+          Champion
+
+        </div>
+
+
+        <div class="pdf-legend__item">
+
+          <span
+            class="pdf-legend__dot pdf-legend__dot--ucl"
+          ></span>
+
+          Champions League
+
+        </div>
+
+
+        <div class="pdf-legend__item">
+
+          <span
+            class="pdf-legend__dot pdf-legend__dot--europa"
+          ></span>
+
+          Europa League
+
+        </div>
+
+
+        <div class="pdf-legend__item">
+
+          <span
+            class="pdf-legend__dot pdf-legend__dot--conference"
+          ></span>
+
+          Conference League
+
+        </div>
+
+
+        <div class="pdf-legend__item">
+
+          <span
+            class="pdf-legend__dot pdf-legend__dot--relegation"
+          ></span>
+
+          Relegation
+
+        </div>
+
+      </section>
+
+
+      <!-- ===================================================
+           PDF MAIN GRID
+      ==================================================== -->
+
+      <div class="pdf-main-grid">
+
+
+        <!-- =================================================
+             PDF TABLE
+        ================================================== -->
+
+        <section class="pdf-panel pdf-table-panel">
+
+          <div class="pdf-section-heading">
+
+            <div>
+
+              <span class="pdf-section-heading__eyebrow">
+                Main prediction
+              </span>
+
+              <h2>
+                Premier League Table
+              </h2>
+
+            </div>
+
+
+            <span class="pdf-season-pill">
+              2026/27
+            </span>
+
+          </div>
+
+
+          <!--
+            JavaScript inserts the PDF league rows here.
+          -->
+
+          <div
+            id="pdfLeagueRows"
+            class="pdf-league-table"
+          ></div>
+
+        </section>
+
+
+        <!-- =================================================
+             PDF RIGHT COLUMN
+        ================================================== -->
+
+        <aside class="pdf-sidebar">
+
+
+          <!-- ===============================================
+               PDF LEADERBOARD
+          ================================================ -->
+
+          <section class="pdf-panel pdf-leaderboard-card">
+
+            <div class="pdf-section-heading pdf-section-heading--small">
+
+              <div>
+
+                <span class="pdf-section-heading__eyebrow">
+                  Last season
+                </span>
+
+                <h2>
+                  2025/26 Leaderboard
+                </h2>
+
+              </div>
+
+            </div>
+
+
+            <div class="pdf-leaderboard">
+
+
+              <div class="pdf-leaderboard__row pdf-leaderboard__row--winner">
+
+                <span
+                  class="pdf-leaderboard__position pdf-leaderboard__position--gold"
+                >
+                  1
+                </span>
+
+                <div class="pdf-leaderboard__person">
+
+                  <strong>
+                    Minzzy
+                  </strong>
+
+                  <span>
+                    Champion
+                  </span>
+
+                </div>
+
+                <strong class="pdf-leaderboard__points">
+                  76
+                </strong>
+
+              </div>
+
+
+              <div class="pdf-leaderboard__row">
+
+                <span
+                  class="pdf-leaderboard__position pdf-leaderboard__position--silver"
+                >
+                  2
+                </span>
+
+                <div class="pdf-leaderboard__person">
+
+                  <strong>
+                    Hussein
+                  </strong>
+
+                  <span>
+                    Runner-up
+                  </span>
+
+                </div>
+
+                <strong class="pdf-leaderboard__points">
+                  80
+                </strong>
+
+              </div>
+
+
+              <div class="pdf-leaderboard__row">
+
+                <span
+                  class="pdf-leaderboard__position pdf-leaderboard__position--bronze"
+                >
+                  3
+                </span>
+
+                <div class="pdf-leaderboard__person">
+
+                  <strong>
+                    Waji
+                  </strong>
+
+                  <span>
+                    Third
+                  </span>
+
+                </div>
+
+                <strong class="pdf-leaderboard__points">
+                  84
+                </strong>
+
+              </div>
+
+
+              <div class="pdf-leaderboard__row">
+
+                <span class="pdf-leaderboard__position">
+                  4
+                </span>
+
+                <div class="pdf-leaderboard__person">
+
+                  <strong>
+                    Shami
+                  </strong>
+
+                </div>
+
+                <strong class="pdf-leaderboard__points">
+                  92
+                </strong>
+
+              </div>
+
+
+              <div class="pdf-leaderboard__row">
+
+                <span class="pdf-leaderboard__position">
+                  5
+                </span>
+
+                <div class="pdf-leaderboard__person">
+
+                  <strong>
+                    Shabal
+                  </strong>
+
+                </div>
+
+                <strong class="pdf-leaderboard__points">
+                  96
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <div class="pdf-points-key">
+              Lowest score wins
+            </div>
+
+          </section>
+
+
+          <!-- ===============================================
+               PDF FPL CHAMPION
+          ================================================ -->
+
+          <section class="pdf-fpl-card">
+
+            <div class="pdf-fpl-card__icon">
+              ★
+            </div>
+
+
+            <div>
+
+              <span class="pdf-fpl-card__eyebrow">
+                Fantasy Premier League
+              </span>
+
+              <h3>
+                FPL Champ: Minzzy
+              </h3>
+
+              <p>
+                2025/26 winner
+              </p>
+
+            </div>
+
+          </section>
+
+
+          <!-- ===============================================
+               PDF BONUS PREDICTIONS
+          ================================================ -->
+
+          <section class="pdf-panel pdf-bonus-card">
+
+            <div class="pdf-section-heading pdf-section-heading--small">
+
+              <div>
+
+                <span class="pdf-section-heading__eyebrow">
+                  Extra points
+                </span>
+
+                <h2>
+                  Bonus Predictions
+                </h2>
+
+              </div>
+
+            </div>
+
+
+            <p class="pdf-bonus-rule">
+              −2 points for every correct prediction
+            </p>
+
+
+            <div class="pdf-bonus-list">
+
+
+              <div class="pdf-bonus-item">
+
+                <span class="pdf-bonus-item__label">
+                  Top Scorer
+                </span>
+
+                <strong
+                  id="pdfTopScorer"
+                  class="pdf-bonus-item__value"
+                >
+                  —
+                </strong>
+
+              </div>
+
+
+              <div class="pdf-bonus-item">
+
+                <span class="pdf-bonus-item__label">
+                  Most Assists
+                </span>
+
+                <strong
+                  id="pdfMostAssists"
+                  class="pdf-bonus-item__value"
+                >
+                  —
+                </strong>
+
+              </div>
+
+
+              <div class="pdf-bonus-item">
+
+                <span class="pdf-bonus-item__label">
+                  FA Cup Winner
+                </span>
+
+                <strong
+                  id="pdfFaCupWinner"
+                  class="pdf-bonus-item__value"
+                >
+                  —
+                </strong>
+
+              </div>
+
+
+              <div class="pdf-bonus-item">
+
+                <span class="pdf-bonus-item__label">
+                  Carabao Cup Winner
+                </span>
+
+                <strong
+                  id="pdfCarabaoCupWinner"
+                  class="pdf-bonus-item__value"
+                >
+                  —
+                </strong>
+
+              </div>
+
+
+              <div class="pdf-bonus-item">
+
+                <span class="pdf-bonus-item__label">
+                  First Manager Sacked
+                </span>
+
+                <strong
+                  id="pdfFirstSacked"
+                  class="pdf-bonus-item__value"
+                >
+                  —
+                </strong>
+
+              </div>
+
+
+              <div class="pdf-bonus-item">
+
+                <span class="pdf-bonus-item__label">
+                  Golden Glove
+                </span>
+
+                <strong
+                  id="pdfGoldenGlove"
+                  class="pdf-bonus-item__value"
+                >
+                  —
+                </strong>
+
+              </div>
+
+            </div>
+
+          </section>
+
+        </aside>
+
+      </div>
+
+
+      <!-- ===================================================
+           PDF LOCKED NOTICE
+      ==================================================== -->
+
+      <section class="pdf-final-notice">
+
+        <div class="pdf-final-notice__icon">
+          ✓
+        </div>
+
+
+        <div>
+
+          <strong>
+            Predictions locked.
+          </strong>
+
+          <span>
+            Predictions are final — no changes after submission.
+          </span>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+    <!-- =====================================================
+         PDF FOOTER
+    ====================================================== -->
+
+    <footer class="pdf-footer">
+
+      <span>
+        COMMANDO FORCE
+      </span>
+
+      <span>
+        PREMIER LEAGUE PREDICTIONS · 2026/27
+      </span>
+
+    </footer>
+
+  </article>
+
+</div>
+
+
+<!-- =========================================================
+     PDF LIBRARIES
+========================================================= -->
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+></script>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+></script>
+
+
+<!-- =========================================================
+     OUR JAVASCRIPT
+========================================================= -->
+
 <script src="script.js"></script>
