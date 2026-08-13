@@ -52,64 +52,38 @@ const leaderboard = [
 const bonusFields = [
   {
     id: "topScorer",
-    label: "Top Scorer",
-    pdfId: "pdfTopScorer"
-  },
-  {
-    id: "mostAssists",
-    label: "Most Assists",
-    pdfId: "pdfMostAssists"
+    label: "Top Scorer"
   },
   {
     id: "faCupWinner",
-    label: "FA Cup Winner",
-    pdfId: "pdfFaCupWinner"
+    label: "FA Cup Winner"
   },
   {
     id: "carabaoCupWinner",
-    label: "Carabao Cup Winner",
-    pdfId: "pdfCarabaoCupWinner"
+    label: "Carabao Cup Winner"
+  },
+  {
+    id: "mostAssists",
+    label: "Most Assists"
   },
   {
     id: "firstSacked",
-    label: "First Manager to be Sacked",
-    pdfId: "pdfFirstSacked"
+    label: "First Manager to be Sacked"
   },
   {
     id: "goldenGlove",
-    label: "Golden Glove",
-    pdfId: "pdfGoldenGlove"
+    label: "Golden Glove"
   }
 ];
-
-/* ============================================================
-   DOM REFERENCES
-============================================================ */
 
 const form = document.getElementById("predictionForm");
 const leagueTable = document.getElementById("leagueTable");
 const clubOptions = document.getElementById("clubOptions");
-
 const tableCount = document.getElementById("tableCount");
 const bonusCount = document.getElementById("bonusCount");
-
 const dateInput = document.getElementById("predictionDate");
-const nameInput = document.getElementById("name");
-
 const messageBox = document.getElementById("message");
-
 const downloadButton = document.getElementById("downloadBtn");
-
-const pdfRenderArea = document.getElementById("pdfRenderArea");
-const pdfDocument = document.getElementById("pdfDocument");
-const pdfLeagueRows = document.getElementById("pdfLeagueRows");
-
-const pdfName = document.getElementById("pdfName");
-const pdfDate = document.getElementById("pdfDate");
-
-/* ============================================================
-   HELPERS
-============================================================ */
 
 function normaliseText(value) {
   return value.trim().toLowerCase();
@@ -127,38 +101,6 @@ function getBonusInputs() {
   });
 }
 
-function safeFileName(value) {
-  return value
-    .trim()
-    .replace(/[^a-z0-9]+/gi, "-")
-    .replace(/^-|-$/g, "");
-}
-
-function clearMessage() {
-  messageBox.textContent = "";
-  messageBox.className = "message";
-}
-
-function showMessage(text, type = "error") {
-  messageBox.textContent = text;
-  messageBox.className = `message message--${type}`;
-
-  messageBox.scrollIntoView({
-    behavior: "smooth",
-    block: "center"
-  });
-}
-
-function clearErrors() {
-  document.querySelectorAll(".input-error").forEach((input) => {
-    input.classList.remove("input-error");
-  });
-}
-
-/* ============================================================
-   CLUB DROPDOWN
-============================================================ */
-
 function createClubOptions() {
   const selectedTeams = getTeamInputs()
     .map((input) => normaliseText(input.value))
@@ -171,50 +113,36 @@ function createClubOptions() {
 
     if (!selectedTeams.includes(normalisedClub)) {
       const option = document.createElement("option");
-
       option.value = club;
-
       clubOptions.appendChild(option);
     }
   });
 }
-
-/* ============================================================
-   CREATE 20 LEAGUE ROWS
-============================================================ */
 
 function createLeagueTable() {
   leagueTable.innerHTML = "";
 
   for (let position = 1; position <= 20; position += 1) {
     const row = document.createElement("div");
-
     row.className = "prediction-row";
 
     const positionNumber = document.createElement("div");
-
     positionNumber.className = "position-number";
     positionNumber.textContent = position;
 
     const input = document.createElement("input");
-
     input.className = "team-input";
     input.type = "text";
-
     input.name = `position-${position}`;
     input.id = `position-${position}`;
-
     input.placeholder = "Select or type a club";
-
     input.setAttribute("list", "clubOptions");
     input.setAttribute("autocomplete", "off");
     input.setAttribute("maxlength", "50");
-
     input.required = true;
 
     input.addEventListener("input", () => {
       input.classList.remove("input-error");
-
       updateProgress();
       createClubOptions();
       clearMessage();
@@ -222,14 +150,9 @@ function createLeagueTable() {
 
     row.appendChild(positionNumber);
     row.appendChild(input);
-
     leagueTable.appendChild(row);
   }
 }
-
-/* ============================================================
-   DATE
-============================================================ */
 
 function setCurrentDate() {
   const today = new Date();
@@ -238,24 +161,8 @@ function setCurrentDate() {
     today.getTime() - today.getTimezoneOffset() * 60000
   );
 
-  dateInput.value = localDate
-    .toISOString()
-    .split("T")[0];
+  dateInput.value = localDate.toISOString().split("T")[0];
 }
-
-function formatDateForDisplay(dateValue) {
-  const date = new Date(`${dateValue}T00:00:00`);
-
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric"
-  }).format(date);
-}
-
-/* ============================================================
-   PROGRESS COUNTERS
-============================================================ */
 
 function updateProgress() {
   const completedTeams = getTeamInputs().filter((input) => {
@@ -269,10 +176,6 @@ function updateProgress() {
   tableCount.textContent = completedTeams;
   bonusCount.textContent = completedBonuses;
 }
-
-/* ============================================================
-   DUPLICATE TEAM CHECK
-============================================================ */
 
 function findDuplicateTeams(values) {
   const seen = new Set();
@@ -295,14 +198,32 @@ function findDuplicateTeams(values) {
   return duplicates;
 }
 
-/* ============================================================
-   VALIDATION
-============================================================ */
+function clearErrors() {
+  document.querySelectorAll(".input-error").forEach((input) => {
+    input.classList.remove("input-error");
+  });
+}
+
+function showMessage(text, type = "error") {
+  messageBox.textContent = text;
+  messageBox.className = `message message--${type}`;
+
+  messageBox.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+}
+
+function clearMessage() {
+  messageBox.textContent = "";
+  messageBox.className = "message";
+}
 
 function validateForm() {
   clearErrors();
   clearMessage();
 
+  const nameInput = document.getElementById("name");
   const teamInputs = getTeamInputs();
   const bonusInputs = getBonusInputs();
 
@@ -319,7 +240,6 @@ function validateForm() {
   requiredInputs.forEach((input) => {
     if (!input.value.trim()) {
       input.classList.add("input-error");
-
       missingFields += 1;
 
       if (!firstInvalidInput) {
@@ -336,7 +256,6 @@ function validateForm() {
     );
 
     firstInvalidInput?.focus();
-
     return false;
   }
 
@@ -349,9 +268,7 @@ function validateForm() {
   if (duplicateTeams.size > 0) {
     teamInputs.forEach((input) => {
       if (
-        duplicateTeams.has(
-          normaliseText(input.value)
-        )
+        duplicateTeams.has(normaliseText(input.value))
       ) {
         input.classList.add("input-error");
       }
@@ -361,9 +278,7 @@ function validateForm() {
       "Each club can only be selected once. Please remove the highlighted duplicate teams."
     );
 
-    document
-      .querySelector(".team-input.input-error")
-      ?.focus();
+    document.querySelector(".team-input.input-error")?.focus();
 
     return false;
   }
@@ -371,192 +286,64 @@ function validateForm() {
   return true;
 }
 
-/* ============================================================
-   PDF TABLE ROW CLASS
-============================================================ */
+function formatDateForPDF(dateValue) {
+  const date = new Date(`${dateValue}T00:00:00`);
 
-function getPdfRowClass(position) {
-  if (position === 1) {
-    return "pdf-league-row--champion";
-  }
-
-  if (position >= 2 && position <= 5) {
-    return "pdf-league-row--ucl";
-  }
-
-  if (position === 6) {
-    return "pdf-league-row--europa";
-  }
-
-  if (position === 7) {
-    return "pdf-league-row--conference";
-  }
-
-  if (position >= 18) {
-    return "pdf-league-row--relegation";
-  }
-
-  return "";
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  }).format(date);
 }
 
-/* ============================================================
-   POPULATE PREMIUM PDF TEMPLATE
-============================================================ */
+function safeFileName(value) {
+  return value
+    .trim()
+    .replace(/[^a-z0-9]+/gi, "-")
+    .replace(/^-|-$/g, "");
+}
 
-function populatePdfTemplate() {
-  const name = nameInput.value.trim();
+function addRoundedBox(
+  pdf,
+  x,
+  y,
+  width,
+  height,
+  fillColour,
+  borderColour
+) {
+  pdf.setFillColor(...fillColour);
+  pdf.setDrawColor(...borderColour);
+
+  pdf.roundedRect(
+    x,
+    y,
+    width,
+    height,
+    2,
+    2,
+    "FD"
+  );
+}
+
+function createPDF() {
+  const { jsPDF } = window.jspdf;
+
+  const pdf = new jsPDF({
+    orientation: "portrait",
+    unit: "mm",
+    format: "a4"
+  });
+
+  const name = document
+    .getElementById("name")
+    .value
+    .trim();
 
   const selectedDate = dateInput.value;
 
   const teams = getTeamInputs().map((input) => {
     return input.value.trim();
-  });
-
-  pdfName.textContent = name;
-
-  pdfDate.textContent =
-    formatDateForDisplay(selectedDate);
-
-  /* =========================
-     TABLE
-  ========================= */
-
-  pdfLeagueRows.innerHTML = "";
-
-  teams.forEach((team, index) => {
-    const position = index + 1;
-
-    const row = document.createElement("div");
-
-    row.className = "pdf-league-row";
-
-    const competitionClass =
-      getPdfRowClass(position);
-
-    if (competitionClass) {
-      row.classList.add(competitionClass);
-    }
-
-    const positionElement =
-      document.createElement("div");
-
-    positionElement.className =
-      "pdf-league-row__position";
-
-    positionElement.textContent =
-      position === 1
-        ? "C."
-        : position;
-
-    const teamElement =
-      document.createElement("div");
-
-    teamElement.className =
-      "pdf-league-row__team";
-
-    teamElement.textContent = team;
-
-    row.appendChild(positionElement);
-    row.appendChild(teamElement);
-
-    pdfLeagueRows.appendChild(row);
-  });
-
-  /* =========================
-     BONUS PREDICTIONS
-  ========================= */
-
-  bonusFields.forEach((field) => {
-    const input =
-      document.getElementById(field.id);
-
-    const pdfField =
-      document.getElementById(field.pdfId);
-
-    if (pdfField) {
-      pdfField.textContent =
-        input.value.trim();
-    }
-  });
-}
-
-/* ============================================================
-   WAIT FOR FONTS
-============================================================ */
-
-async function waitForFonts() {
-  if (document.fonts?.ready) {
-    try {
-      await document.fonts.ready;
-    } catch (error) {
-      console.warn(
-        "Could not wait for fonts:",
-        error
-      );
-    }
-  }
-}
-
-/* ============================================================
-   CREATE PREMIUM PDF
-============================================================ */
-
-async function createPremiumPDF() {
-  populatePdfTemplate();
-
-  await waitForFonts();
-
-  /*
-    Give the browser a moment to apply all PDF styles
-    after the text and table rows are inserted.
-  */
-
-  await new Promise((resolve) => {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(resolve);
-    });
-  });
-
-  const canvas = await html2canvas(
-    pdfDocument,
-    {
-      scale: 2.5,
-
-      useCORS: true,
-
-      backgroundColor: "#ffffff",
-
-      logging: false,
-
-      width: 794,
-
-      height: 1123,
-
-      windowWidth: 794,
-
-      windowHeight: 1123,
-
-      scrollX: 0,
-
-      scrollY: 0
-    }
-  );
-
-  const imageData = canvas.toDataURL(
-    "image/jpeg",
-    0.96
-  );
-
-  const { jsPDF } = window.jspdf;
-
-  const pdf = new jsPDF({
-    orientation: "portrait",
-
-    unit: "mm",
-
-    format: "a4",
-
-    compress: true
   });
 
   const pageWidth =
@@ -565,19 +352,659 @@ async function createPremiumPDF() {
   const pageHeight =
     pdf.internal.pageSize.getHeight();
 
-  pdf.addImage(
-    imageData,
-    "JPEG",
+  /* =========================
+     PDF HEADER
+  ========================= */
+
+  pdf.setFillColor(7, 23, 63);
+  pdf.rect(
     0,
     0,
     pageWidth,
-    pageHeight,
-    undefined,
-    "FAST"
+    36,
+    "F"
   );
 
-  const name =
-    nameInput.value.trim();
+  pdf.setTextColor(
+    255,
+    255,
+    255
+  );
+
+  pdf.setFont(
+    "helvetica",
+    "bold"
+  );
+
+  pdf.setFontSize(18);
+
+  pdf.text(
+    "Commando Force 2026/27 Predictions",
+    12,
+    15
+  );
+
+  pdf.setFont(
+    "helvetica",
+    "normal"
+  );
+
+  pdf.setFontSize(9);
+
+  pdf.setTextColor(
+    205,
+    217,
+    245
+  );
+
+  pdf.text(
+    `Name: ${name}`,
+    12,
+    26
+  );
+
+  pdf.text(
+    `Date: ${formatDateForPDF(selectedDate)}`,
+    108,
+    26
+  );
+
+  /* =========================
+     LEAGUE TABLE
+  ========================= */
+
+  const tableX = 12;
+  const tableY = 43;
+  const tableWidth = 104;
+  const positionWidth = 13;
+  const rowHeight = 9.6;
+
+  teams.forEach((team, index) => {
+    const position = index + 1;
+    const y = tableY + index * rowHeight;
+
+    let fillColour = [
+      255,
+      255,
+      255
+    ];
+
+    let positionColour = [
+      237,
+      241,
+      248
+    ];
+
+    let borderColour = [
+      218,
+      224,
+      235
+    ];
+
+    let positionTextColour = [
+      52,
+      64,
+      91
+    ];
+
+    /* Champion */
+    if (position === 1) {
+      fillColour = [
+        255,
+        249,
+        223
+      ];
+
+      positionColour = [
+        244,
+        197,
+        66
+      ];
+
+      borderColour = [
+        229,
+        187,
+        56
+      ];
+
+      positionTextColour = [
+        93,
+        66,
+        0
+      ];
+    }
+
+    /* Champions League */
+    else if (
+      position >= 2 &&
+      position <= 5
+    ) {
+      fillColour = [
+        241,
+        245,
+        255
+      ];
+
+      positionColour = [
+        71,
+        112,
+        224
+      ];
+
+      borderColour = [
+        124,
+        155,
+        231
+      ];
+
+      positionTextColour = [
+        255,
+        255,
+        255
+      ];
+    }
+
+    /* Europa League */
+    else if (position === 6) {
+      fillColour = [
+        255,
+        247,
+        236
+      ];
+
+      positionColour = [
+        243,
+        154,
+        47
+      ];
+
+      borderColour = [
+        232,
+        168,
+        90
+      ];
+
+      positionTextColour = [
+        255,
+        255,
+        255
+      ];
+    }
+
+    /* Conference League */
+    else if (position === 7) {
+      fillColour = [
+        239,
+        252,
+        245
+      ];
+
+      positionColour = [
+        22,
+        147,
+        111
+      ];
+
+      borderColour = [
+        111,
+        198,
+        166
+      ];
+
+      positionTextColour = [
+        255,
+        255,
+        255
+      ];
+    }
+
+    /* Relegation */
+    else if (position >= 18) {
+      fillColour = [
+        255,
+        241,
+        243
+      ];
+
+      positionColour = [
+        217,
+        39,
+        56
+      ];
+
+      borderColour = [
+        231,
+        130,
+        140
+      ];
+
+      positionTextColour = [
+        255,
+        255,
+        255
+      ];
+    }
+
+    addRoundedBox(
+      pdf,
+      tableX,
+      y,
+      tableWidth,
+      rowHeight - 0.7,
+      fillColour,
+      borderColour
+    );
+
+    pdf.setFillColor(
+      ...positionColour
+    );
+
+    pdf.roundedRect(
+      tableX,
+      y,
+      positionWidth,
+      rowHeight - 0.7,
+      2,
+      2,
+      "F"
+    );
+
+    pdf.rect(
+      tableX + positionWidth - 2,
+      y,
+      2,
+      rowHeight - 0.7,
+      "F"
+    );
+
+    pdf.setTextColor(
+      ...positionTextColour
+    );
+
+    pdf.setFont(
+      "helvetica",
+      "bold"
+    );
+
+    pdf.setFontSize(8.5);
+
+    pdf.text(
+      position === 1
+        ? "C."
+        : `${position}.`,
+      tableX + positionWidth / 2,
+      y + 6.1,
+      {
+        align: "center"
+      }
+    );
+
+    pdf.setTextColor(
+      25,
+      35,
+      58
+    );
+
+    pdf.setFont(
+      "helvetica",
+      "bold"
+    );
+
+    pdf.setFontSize(8.7);
+
+    pdf.text(
+      team,
+      tableX + positionWidth + 4,
+      y + 6.1,
+      {
+        maxWidth:
+          tableWidth -
+          positionWidth -
+          8
+      }
+    );
+  });
+
+  /* =========================
+     SIDEBAR
+  ========================= */
+
+  const sideX = 123;
+  const sideWidth = 75;
+
+  /* =========================
+     LEADERBOARD
+  ========================= */
+
+  addRoundedBox(
+    pdf,
+    sideX,
+    43,
+    sideWidth,
+    61,
+    [
+      249,
+      250,
+      253
+    ],
+    [
+      219,
+      225,
+      236
+    ]
+  );
+
+  pdf.setTextColor(
+    27,
+    39,
+    69
+  );
+
+  pdf.setFont(
+    "helvetica",
+    "bold"
+  );
+
+  pdf.setFontSize(11);
+
+  pdf.text(
+    "2025/26 Leaderboard",
+    sideX + 5,
+    51
+  );
+
+  leaderboard.forEach(
+    (entry, index) => {
+      const y =
+        60 +
+        index * 8.5;
+
+      pdf.setFontSize(8.6);
+
+      pdf.setFont(
+        "helvetica",
+        index === 0
+          ? "bold"
+          : "normal"
+      );
+
+      pdf.setTextColor(
+        31,
+        43,
+        69
+      );
+
+      pdf.text(
+        `${entry.position}  ${entry.name}`,
+        sideX + 5,
+        y
+      );
+
+      pdf.text(
+        `${entry.points} pts`,
+        sideX +
+          sideWidth -
+          5,
+        y,
+        {
+          align: "right"
+        }
+      );
+    }
+  );
+
+  /* =========================
+     FPL CHAMPION
+  ========================= */
+
+  addRoundedBox(
+    pdf,
+    sideX,
+    109,
+    sideWidth,
+    27,
+    [
+      255,
+      249,
+      224
+    ],
+    [
+      231,
+      202,
+      108
+    ]
+  );
+
+  pdf.setTextColor(
+    138,
+    104,
+    19
+  );
+
+  pdf.setFont(
+    "helvetica",
+    "bold"
+  );
+
+  pdf.setFontSize(7.5);
+
+  pdf.text(
+    "FANTASY PREMIER LEAGUE",
+    sideX + 5,
+    117
+  );
+
+  pdf.setTextColor(
+    55,
+    44,
+    17
+  );
+
+  pdf.setFontSize(11);
+
+  pdf.text(
+    "FPL Champ: Minzzy",
+    sideX + 5,
+    126
+  );
+
+  pdf.setFont(
+    "helvetica",
+    "normal"
+  );
+
+  pdf.setTextColor(
+    121,
+    103,
+    57
+  );
+
+  pdf.setFontSize(7.5);
+
+  pdf.text(
+    "2025/26 winner",
+    sideX + 5,
+    132
+  );
+
+  /* =========================
+     BONUS PREDICTIONS
+  ========================= */
+
+  addRoundedBox(
+    pdf,
+    sideX,
+    142,
+    sideWidth,
+    85,
+    [
+      255,
+      255,
+      255
+    ],
+    [
+      219,
+      225,
+      236
+    ]
+  );
+
+  pdf.setTextColor(
+    27,
+    39,
+    69
+  );
+
+  pdf.setFont(
+    "helvetica",
+    "bold"
+  );
+
+  pdf.setFontSize(11);
+
+  pdf.text(
+    "Bonus Predictions",
+    sideX + 5,
+    151
+  );
+
+  pdf.setTextColor(
+    111,
+    119,
+    139
+  );
+
+  pdf.setFont(
+    "helvetica",
+    "normal"
+  );
+
+  pdf.setFontSize(6.8);
+
+  pdf.text(
+    "Minus 2 points for every correct prediction",
+    sideX + 5,
+    156
+  );
+
+  let bonusY = 164;
+
+  bonusFields.forEach((field) => {
+    const value = document
+      .getElementById(field.id)
+      .value
+      .trim();
+
+    pdf.setFont(
+      "helvetica",
+      "bold"
+    );
+
+    pdf.setFontSize(7.2);
+
+    pdf.setTextColor(
+      89,
+      100,
+      123
+    );
+
+    pdf.text(
+      field.label.toUpperCase(),
+      sideX + 5,
+      bonusY
+    );
+
+    pdf.setFont(
+      "helvetica",
+      "normal"
+    );
+
+    pdf.setFontSize(8.4);
+
+    pdf.setTextColor(
+      27,
+      39,
+      69
+    );
+
+    const wrappedValue =
+      pdf.splitTextToSize(
+        value,
+        sideWidth - 10
+      );
+
+    pdf.text(
+      wrappedValue,
+      sideX + 5,
+      bonusY + 5
+    );
+
+    bonusY +=
+      wrappedValue.length > 1
+        ? 14
+        : 11.5;
+  });
+
+  /* =========================
+     FOOTER
+  ========================= */
+
+  pdf.setDrawColor(
+    219,
+    225,
+    236
+  );
+
+  pdf.line(
+    12,
+    245,
+    pageWidth - 12,
+    245
+  );
+
+  pdf.setTextColor(
+    104,
+    113,
+    132
+  );
+
+  pdf.setFont(
+    "helvetica",
+    "italic"
+  );
+
+  pdf.setFontSize(8);
+
+  pdf.text(
+    "Predictions are final — no changes after submission!",
+    pageWidth / 2,
+    253,
+    {
+      align: "center"
+    }
+  );
+
+  pdf.setTextColor(
+    150,
+    157,
+    171
+  );
+
+  pdf.setFont(
+    "helvetica",
+    "normal"
+  );
+
+  pdf.setFontSize(7);
+
+  pdf.text(
+    "Commando Force · 2026/27",
+    pageWidth / 2,
+    pageHeight - 9,
+    {
+      align: "center"
+    }
+  );
 
   const fileName =
     `CommandoForce-2026-27-${safeFileName(name)}.pdf`;
@@ -585,38 +1012,30 @@ async function createPremiumPDF() {
   pdf.save(fileName);
 }
 
-/* ============================================================
-   BONUS INPUT EVENTS
-============================================================ */
+/* =========================
+   INPUT EVENTS
+========================= */
 
 getBonusInputs().forEach((input) => {
   input.addEventListener("input", () => {
     input.classList.remove("input-error");
-
     updateProgress();
-
     clearMessage();
   });
 });
 
-/* ============================================================
-   NAME EVENT
-============================================================ */
+document
+  .getElementById("name")
+  .addEventListener(
+    "input",
+    (event) => {
+      event.target.classList.remove(
+        "input-error"
+      );
 
-nameInput.addEventListener(
-  "input",
-  () => {
-    nameInput.classList.remove(
-      "input-error"
-    );
-
-    clearMessage();
-  }
-);
-
-/* ============================================================
-   DATE EVENT
-============================================================ */
+      clearMessage();
+    }
+  );
 
 dateInput.addEventListener(
   "change",
@@ -629,39 +1048,35 @@ dateInput.addEventListener(
   }
 );
 
-/* ============================================================
-   FORM SUBMISSION / PDF DOWNLOAD
-============================================================ */
+/* =========================
+   DOWNLOAD PDF
+========================= */
 
 form.addEventListener(
   "submit",
-  async (event) => {
+  (event) => {
     event.preventDefault();
 
     if (!validateForm()) {
       return;
     }
 
-    const buttonText =
-      downloadButton.querySelector("span");
-
     downloadButton.disabled = true;
 
-    buttonText.textContent =
-      "Creating premium PDF...";
+    downloadButton
+      .querySelector("span")
+      .textContent =
+      "Creating PDF...";
 
     try {
-      await createPremiumPDF();
+      createPDF();
 
       showMessage(
-        "Your premium prediction PDF has been downloaded.",
+        "Your prediction PDF has been downloaded.",
         "success"
       );
     } catch (error) {
-      console.error(
-        "PDF generation error:",
-        error
-      );
+      console.error(error);
 
       showMessage(
         "The PDF could not be created. Please refresh the page and try again."
@@ -669,20 +1084,19 @@ form.addEventListener(
     } finally {
       downloadButton.disabled = false;
 
-      buttonText.textContent =
+      downloadButton
+        .querySelector("span")
+        .textContent =
         "Download prediction PDF";
     }
   }
 );
 
-/* ============================================================
-   INITIALISE WEBSITE
-============================================================ */
+/* =========================
+   INITIALISE
+========================= */
 
 createLeagueTable();
-
 createClubOptions();
-
 setCurrentDate();
-
 updateProgress();
